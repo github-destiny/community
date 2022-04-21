@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.TaskMapper">
+    <insert id="saveTask">
+        insert into tbl_task(returnees_id, strategy, content, staff_id, state, createTime)
+        values (#{returnees_id}, #{strategy}, #{content}, #{staff_id}, #{state}, #{createTime})
+    </insert>
+
+    <update id="updateTask">
+        update tbl_task
+        <trim prefix="set" suffixOverrides=",">
+            <if test="staff_id != null and staff_id != ''">
+                staff_id = #{staff_id},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                updateTime = #{updateTime},
+            </if>
+            <if test="acceptTime != null and acceptTime != ''">
+                acceptTime = #{acceptTime},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="findTasks" resultType="cn.nero.community.domain.vo.TaskVO">
+        select t.id, t.strategy, t.content, t.state, t.createTime, r.id as returneesId, t.acceptTime
+               r.name, r.gender, r.idCard, r.address, r.applyTime, r.phone, r.inoculationTimes, r.endTime,c.province, c.city
+        from tbl_task t
+        left join tbl_returnees r
+        on t.returnees_id = r.id
+        left join tbl_cities c
+        on r.from = c.id
+        <where>
+            <if test="task.staff_id == null or task.staff_id == ''">
+                staff_id is null
+            </if>
+            <if test="task.staff_id != null and task.staff_id != ''">
+                and staff_id = #{task.staff_id}
+            </if>
+        </where>
+        order by createTime desc
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTasksTotal" resultType="java.lang.Integer">
+        select count(1) from tbl_task
+        <where>
+            <if test="staff_id == null or staff_id == ''">
+                staff_id is null
+            </if>
+            <if test="staff_id != null and staff_id != ''">
+                and staff_id = #{staff_id}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>创建员工</title>
+</head>
+<body>
+    <h1>创建员工</h1>
+    <form th:action="@{/staff/save}" method="post">
+        <input type="text" name="name" placeholder="姓名"> <br>
+        <input type="text" name="age" placeholder="年龄"> <br>
+        <input type="text" name="gender" placeholder="性别"> <br>
+        <input type="text" name="idCard" placeholder="身份证号"> <br>
+        <input type="text" name="phone" placeholder="手机号"> <br>
+        <input type="text" name="job_id" placeholder="职位"> <br>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.UserMapper">
+    <insert id="saveUser">
+        insert into tbl_user (account, password, nick_name, lockState, phone, createTime, salt, resident_id)
+        values (#{account}, #{password}, #{nick_name}, #{lockState}, #{phone}, #{createTime}, #{salt}, #{resident_id})
+    </insert>
+    <update id="updateUser">
+        update tbl_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="nick_name != null and nick_name != ''">
+                nick_name = #{nick_name},
+            </if>
+            <if test="lockState != null and lockState != ''">
+                lockState = #{lockState},
+            </if>
+            <if test="lockEndTime != null and lockEndTime != ''">
+                lockEndTime = #{lockEndTime},
+            </if>
+            <if test="lockReason != null and lockReason != ''">
+                lockReason = #{lockReason},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="batchBanUser">
+        update tbl_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="reason != null and reason != ''">
+                reason = #{reason},
+            </if>
+            <if test="lockEndTime != null and lockEndTime != ''">
+                lockEndTime = #{lockEndTime},
+            </if>
+            <if test="lockState != null and lockState != ''">
+                lockState = #{lockState}
+            </if>
+        </trim>
+        where account in
+        <foreach collection="accountList" item="account" open="(" separator="," close=")">
+            #{account}
+        </foreach>
+    </update>
+    <delete id="deleteUser">
+        delete from tbl_user where account = #{condition} or id = #{condition}
+    </delete>
+
+    <select id="findUsers" resultType="cn.nero.community.domain.vo.UserVO">
+        select u.id as userId, u.account,  u.nick_name, u.lockState, u.createTime, r.id as residentId, r.idCard, r.name as realName, r.age, r.gender,
+        r.address, r.phone, r.state
+        from tbl_user u
+        left join tbl_resident r
+        on u.resident_id = r.id
+        <where>
+            <if test="user.account  != null and user.account != ''">
+                u.account = #{user.account},
+            </if>
+            <if test="user.nick_name != null and user.nick_name != ''">
+                u.nick_name like concat('%', #{user.nick_name}, '%'),
+            </if>
+            <if test="user.lockState != null and user.lockState != ''">
+                u.lockState = #{user.lockState},
+            </if>
+            <if test="user.createTime != null and user.createTime != ''">
+                u.createTime > #{user.createTime},
+            </if>
+        </where>
+        order by u.id
+        limit by #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_user u
+        left join tbl_resident r
+        on u.resident_id = r.id
+        <where>
+            <if test="account  != null and account != ''">
+                u.account = #{account},
+            </if>
+            <if test="nick_name != null and nick_name != ''">
+                u.nick_name like concat('%', #{nick_name}, '%'),
+            </if>
+            <if test="lockState != null and lockState != ''">
+                u.lockState = #{lockState},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                u.createTime > #{createTime},
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserByAccount" resultType="cn.nero.community.domain.User">
+        select id, account, password, nick_name, lockState, lockEndTime, phone, createTime, salt, resident_id
+        from tbl_user
+        where account = #{account}
+    </select>
+</mapper>

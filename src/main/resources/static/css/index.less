@@ -1,0 +1,245 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+li {
+    list-style: none;
+}
+/* 声明字体*/
+@font-face {
+    font-family: electronicFont;
+    src: url(../font/DS-DIGIT.TTF);
+  }
+body {
+    background: url(../image/bg.jpg) no-repeat top center;
+    line-height: 1.15;
+    background-size: cover;
+}
+header {
+    height: 1.25rem;
+    background: url(../image/head_bg.png) no-repeat;
+    background-size: 100% 100%;
+    position: relative;
+    min-width: 12.8rem;
+
+    h1 {
+        font-size: .475rem;
+        color: #fff;
+        line-height: 1rem;
+        text-align: center;
+    }
+    .showTime {
+        position: absolute;
+        right: .375rem;
+        line-height: .9375rem;
+        top: 0;
+        color: rgba(255, 255, 255, .7);
+        font-size: .25rem;
+    }
+}
+.mainbox {
+    padding: .125rem .125rem 0;
+    display: flex;
+    .column {
+        flex: 3;
+        height: 1.25rem;
+        .panel {
+            position: relative;
+            height: 3.875rem;
+            border: 1px solid rgba(25, 186, 139, 0.17);
+            background: url(../image/line.jpg) rgba(255,255,255,.1);
+            padding: 0 0.1875rem 0.5rem;
+            margin-bottom: .1875rem;
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 10px;
+                height: 10px;
+                border-top: 2px solid #02a6b5;
+                border-left: 2px solid #02a6b5;
+            }
+            &::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 10px;
+                height: 10px;
+                border-top: 2px solid #02a6b5;
+                border-right: 2px solid #02a6b5;
+            }
+            .panel-foot {
+                bottom: 0;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 10px;
+                    height: 10px;
+                    border-bottom: 2px solid #02a6b5;
+                    border-left: 2px solid #02a6b5;
+                }
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: 10px;
+                    height: 10px;
+                    border-bottom: 2px solid #02a6b5;
+                    border-right: 2px solid #02a6b5;
+                }
+            }
+            h2 {
+                height: .6rem;
+                color: #fff;
+                font-size: .25rem;
+                line-height: .6rem;
+                text-align: center;
+                a {
+                    text-decoration: none;
+                    color: #fff;
+                    margin: 0 .125rem;
+                }
+            }
+            .chart {
+                height: 3rem;
+                // background-color: PINK;
+            }
+        }
+        .no {
+            background: rgba(101, 132, 226, 0.1);
+            padding: .1875rem;
+            .no-hd {
+                border: 1px solid rgba(25, 186, 139, 0.17);
+                position: relative;
+                ul {
+                    display: flex;
+                    li {
+                        height: 1rem;
+                        font-size: .875rem;
+                        flex: 1;
+                        color: #ffeb7b;
+                        text-align: center;
+                        font-family: electronicFont;
+                        position: relative;
+                        &:nth-child(1)::before {
+                            content: '';
+                            position: absolute;
+                            border: 1px rgba(255, 255, 255, .2);
+                            height: 50%;
+                            width: 1px;
+                            top: 25%;
+                            right: 0;
+                        }
+                    } 
+                }
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: .375rem;
+                    height: .125rem;
+                    border-top: 2px solid #02a6b5;
+                    border-left: 2px solid #02a6b5;
+                }
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    width: .375rem;
+                    height: .125rem;
+                    border-bottom: 2px solid #02a6b5;
+                    border-right: 2px solid #02a6b5;
+                }
+            }
+            .no-bd{
+                ul {
+                    display: flex;
+                    li {
+                        height: .5rem;
+                        color:  rgba(255, 255, 255, 0.7) ;
+                        font-size: .225rem;
+                        padding-top: .125rem;
+                        padding-bottom: .125rem;
+                        flex: 1;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    .column:nth-child(2) {
+        flex: 5;
+        margin: 0 .125rem;
+        margin-bottom: .1875rem;
+    }
+}
+.map {
+    position: relative;
+    height: 10.125rem;
+    .map1 {
+        width: 6.475rem;
+        height: 6.475rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: url(../image/map.png);
+        background-size: contain;
+        opacity: .3;
+    }
+    .map2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8.0375rem;
+        height: 8.0375rem;
+        background: url(../image/lbx.png);
+        background-size: contain;
+        animation: map2rotate 15s linear infinite;
+        opacity: .6;
+    }
+    .map3 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 7.075rem;
+        height: 7.075rem;
+        background: url(../image/jt.png);
+        background-size: contain;
+        animation: map3rotate 8s linear infinite;
+        opacity: .6;
+    }
+    .chart {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10.125rem;
+    }
+    @keyframes map2rotate {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(360deg);
+        }
+    }
+    @keyframes map3rotate {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(-360deg);
+        }
+    }
+}

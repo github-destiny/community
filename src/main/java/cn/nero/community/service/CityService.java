@@ -1,0 +1,34 @@
+package cn.nero.community.service;
+
+import cn.nero.community.domain.City;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @author Nero Claudius
+ * @version 1.0.0
+ * @Date 2022/4/16
+ */
+public interface CityService {
+
+    /**
+     * 通过城市的部分信息查询他的全部信息
+     * @param city
+     * @return
+     */
+    List<Map<String, Object>> findCitiesByCondition(City city);
+
+    /**
+     * 更新地区的风险等级
+     * @param ids
+     * @param level
+     */
+    void updateCityLevel(List<String> ids, String level);
+
+    /**
+     * 更新省份的风险等级
+     */
+    void updateProvinceLevel(String province, String level);
+
+}

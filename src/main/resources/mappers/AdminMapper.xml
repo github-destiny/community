@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.AdminMapper">
+
+    <insert id="saveAdmin">
+        insert into tbl_admin(account, password, salt, lockState, role, createTime)
+        values(#{account}, #{password}, #{salt}, #{lockState}, #{role}, #{createTime})
+    </insert>
+
+    <update id="editAdmin">
+        update tbl_admin
+        <set>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="lockState != null and lockState != ''">
+                lockState = #{lockState},
+            </if>
+            <if test="role != null and role != ''">
+                role = #{role}
+            </if>
+        </set>
+        where account = #{account}
+    </update>
+
+    <update id="approval">
+        update tbl_admin set lockState = '1'
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findAdminByAccount" resultType="cn.nero.community.domain.Admin">
+        select id, account, password, salt, lockState, role from tbl_admin
+        where account = #{account}
+    </select>
+
+    <select id="findAdminByCondition" resultType="cn.nero.community.domain.Admin">
+        select id, account, staff_id, resident_id, lockState, role, createTime
+        from tbl_admin
+        <where>
+            <if test="admin.account != null and admin.account != ''">
+                account = #{admin.account}
+            </if>
+             <if test="admin.staff_id != null and admin.staff_id != ''">
+                 and staff_id = #{admin.staff_id}
+             </if>
+             <if test="admin.resident_id != null and admin.resident_id != ''">
+                 and resident_id = #{admin.resident_id}
+             </if>
+             <if test="admin.lockState != null and admin.lockState != ''">
+                 and lockState = #{admin.lockState}
+             </if>
+             <if test="admin.role != null and admin.role != ''">
+                 and role = #{admin.role}
+             </if>
+             <if test="admin.createTime != null and admin.createTime != ''">
+                 and createTime > #{admin.createTime}
+             </if>
+        </where>
+        order by id
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_admin
+        <where>
+            <if test="lockState != null and lockState != ''">
+                lockState = #{lockState}
+            </if>
+            <if test="role != null and role != ''">
+                and role = #{role}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and createTime > #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="findRoleByAccount" resultType="java.lang.String">
+        select role from tbl_admin where account = #{account}
+    </select>
+</mapper>

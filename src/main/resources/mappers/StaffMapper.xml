@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.StaffMapper">
+
+    <insert id="saveStaffInfo" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_staff(name, age, gender, idCard, phone, job_id, state)
+        values (#{name}, #{age}, #{gender}, #{idCard}, #{phone}, #{job_id}, #{state})
+    </insert>
+
+    <update id="editStaff">
+        update tbl_staff
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="idCard != null and idCard != ''">
+                idCard = #{idCard},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="job_id != null and job_id != ''">
+                job_id = #{job_id},
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdateStaffState">
+        update tbl_staff set state = '1'
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findStaffByAdminIdOrAccount" resultType="cn.nero.community.domain.Staff">
+        SELECT s.*
+        from tbl_admin a
+        join tbl_staff s
+        on a.staff_id = s.id
+        where a.id = #{condition} or a.account = #{condition}
+    </select>
+
+    <select id="findStaffByStaffCondition" resultType="cn.nero.community.domain.Staff">
+        select id, name, age, gender, idCard, phone, job_id, state
+        from tbl_staff
+        <where>
+            <if test="staff.name != null and staff.name != ''">
+                name like concat('%', #{staff.name}, '%')
+            </if>
+            <if test="staff.age != null and staff.age != ''">
+                and age > #{staff.age}
+            </if>
+            <if test="staff.gender != null and staff.gender != ''">
+                and gender = #{staff.gender}
+            </if>
+            <if test="staff.job_id != null and staff.job_id != ''">
+                and job_id = #{staff.job_id}
+            </if>
+            <if test="staff.state != null and staff.state != ''">
+                and state = #{staff.state}
+            </if>
+        </where>
+        order by id
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1) from tbl_staff
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%', #{name}, '%')
+            </if>
+            <if test="age != null and age != ''">
+                and age > #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="job_id != null and job_id != ''">
+                and job_id = #{job_id}
+            </if>
+            <if test="state != null and state != ''">
+                and state = #{state}
+            </if>
+        </where>
+    </select>
+
+</mapper>

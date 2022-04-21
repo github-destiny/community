@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.ResidentMapper">
+    <insert id="saveResident" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_resident(idCard, name, age, gender, address, phone, state)
+        values (#{idCard}, #{name}, #{age}, #{gender}, #{address}, #{phone}, #{state})
+    </insert>
+
+    <insert id="saveManyResident">
+        insert into tbl_resident(idCard, name, age, gender, address, phone, state)
+        values
+        <foreach collection="residents" item="resident" separator=",">
+            (
+            #{resident.idCard}, #{resident.name}, #{resident.age}, #{resident.gender}, #{resident.address}, #{resident.phone}, #{resident.state}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="batchSaveInoculationInfo">
+        insert into tbl_inoculation(resident_id, times, lastTime)
+        values
+        <foreach collection="inoculations" item="inoculation" separator=",">
+            (#{inoculation.resident_id}, #{inoculation.times}, #{inoculation.lastTime})
+        </foreach>
+    </insert>
+
+    <update id="editResidentInfo">
+        update tbl_resident
+        <set>
+            <if test="idCard != null and idCard != ''">
+                idCard = #{idCard},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="age != null and age != ''">
+                age = #{age},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone}
+            </if>
+            <if test="state != null and state != ''">
+                state = #{state}
+            </if>
+        </set>
+        where id =  #{id}
+    </update>
+
+    <delete id="deleteResident">
+        delete from tbl_resident where id = #{id}
+    </delete>
+
+    <select id="findResidentByUserId" resultType="cn.nero.community.domain.Resident">
+        select r.id, r.idCard, r.name, r.age, r.gender, r.address, r.phone, r.state
+        from tbl_user u
+        join tbl_resident r
+        on u.resident_id = r.id
+        where u.id = #{id}
+    </select>
+
+    <select id="findResidentsByCondition" resultType="cn.nero.community.domain.Resident">
+        select t.id, t.idCard, t.name, t.age, t.gender, t.address, t.phone, s.state
+        from tbl_resident t
+        left join tbl_state s
+        on t.state = s.id
+        <where>
+            <if test="resident.idCard != null and resident.idCard != ''">
+                t.idCard = #{resident.idCard}
+            </if>
+            <if test="resident.name != null and resident.name != ''">
+                and t.name like concat('%', #{resident.name}, '%')
+            </if>
+            <if test="resident.age != null and resident.age != ''">
+                and t.age > #{resident.age}
+            </if>
+            <if test="resident.gender != null and resident.gender != ''">
+                and t.gender = #{resident.gender}
+            </if>
+            <if test="resident.address != null and resident.address != ''">
+                and t.address like concat('%', #{resident.address}, '%')
+            </if>
+            <if test="resident.phone != null and resident.phone != ''">
+                and t.phone like concat('%', #{resident.phone}, '%')
+            </if>
+            <if test="resident.state != null and resident.state != ''">
+                and t.state = #{resident.state}
+            </if>
+        </where>
+        order by t.id
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_resident
+        <where>
+            <if test="idCard != null and idCard != ''">
+                and idCard = #{idCard}
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="age != null and age != ''">
+                and age > #{age}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="address != null and address != ''">
+                and address like concat('%', #{address}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('%', #{phone}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getTotalAboutAge" resultType="java.lang.Integer">
+        select count(1) from tbl_resident where age &gt; #{lowAge} and age &lt;= #{highAge}
+    </select>
+
+    <resultMap id="riVO" type="residentInoculationVO">
+        <id property="resident.id" column="id"/>
+        <result property="resident.idCard" column="idCard"/>
+        <result property="resident.name" column="name"/>
+        <result property="resident.age" column="age"/>
+        <result property="resident.gender" column="gender"/>
+        <result property="resident.address" column="address"/>
+        <result property="resident.phone" column="phone"/>
+        <result property="resident.state" column="state"/>
+        <result property="inoculation.id" column="inoculationId"/>
+        <result property="inoculation.times" column="times"/>
+        <result property="inoculation.lastTime" column="lastTime"/>
+    </resultMap>
+
+    <select id="findResidentInoculationInfoByCondition"
+            resultMap="riVO">
+        select r.*, i.id as inoculationId, i.times, i.lastTime
+        from tbl_resident r
+        left join tbl_inoculation i
+        on r.id = i.resident_id
+        <where>
+            <if test="resident_id != null and resident_id != ''">
+                r.id = #{resident_id}
+            </if>
+            <if test="times != null and times != ''">
+                and i.times = #{times}
+            </if>
+            <if test="lastTime != null and lastTime != ''">
+                and i.lastTime > #{lastTime}
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="address != null and address != ''">
+                and address like concat('%', #{address}, '%')
+            </if>
+        </where>
+        order by r.id
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getInoculationCount" resultType="java.lang.Integer">
+        select count(1) from tbl_inoculation
+        <where>
+            <if test="times != null and times != ''">
+                times = #{times}
+            </if>
+            <if test="lastTime != null and lastTime != ''">
+                and lastTime > #{lastTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserByResidentId" resultType="cn.nero.community.domain.User">
+        select u.id, u.account, u.nick_name, u.lockState, u.phone, u.createTime, u.resident_id
+        from tbl_resident r
+        join tbl_user u
+        on r.id = u.resident_id
+    </select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.NucleicMapper">
+    <insert id="saveNucleic" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_nucleic(resident_id, result, time)
+        values (#{resident_id}, #{result}, #{time})
+    </insert>
+    <insert id="saveNucleicByResidentIdColumn">
+        insert into tbl_nucleic(resident_id)
+        values (#{residentId})
+    </insert>
+    <update id="editNucleic">
+        update tbl_nucleic
+        set result = #{result}, time = #{time}
+        where id = #{id} or resident_id = #{resident_id}
+    </update>
+
+    <update id="batchEditNucleic">
+        update tbl_nucleic
+        set result = #{result}, time = #{time}
+        where resident_id in
+        <foreach collection="residentIds" item="residentId" open="(" separator="," close=")">
+            #{residentId}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateReturneesNucleic">
+        update tbl_returnees
+        set testTime = #{testTime}, result = #{result}
+        where id in
+        <foreach collection="returneesIds" item="returneesId" open="(" separator="," close=")">
+            #{returneesId}
+        </foreach>
+    </update>
+
+    <select id="findNucleicByIdCardOrId" resultType="cn.nero.community.domain.vo.ResidentNucleicVO">
+        select r.id, r.idCard, r.name, r.age, r.gender, r.address, r.phone, n.result, n.time
+        from tbl_resident r
+        left join tbl_nucleic n
+        on n.resident_id = r.id
+        <where>
+            <if test="id != null and id != ''">
+                r.id = #{id}
+            </if>
+            <if test="idCard != null and idCard != ''">
+                r.idCard = #{idCard}
+            </if>
+            <if test="phone != null and phone != ''">
+                r.phone = #{phone}
+            </if>
+        </where>
+    </select>
+
+    <select id="findNucleicResultAll" resultType="java.lang.Integer">
+        select count(1) from tbl_nucleic
+        <where>
+            <if test="result != null and result != ''">
+                result = #{result}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPositiveResidentNucleicVO" resultType="cn.nero.community.domain.vo.ResidentNucleicVO">
+        select r.id, r.idCard, r.name, r.age, r.gender, r.address, r.phone, n.result, n.time
+        from tbl_resident r
+        left join tbl_nucleic n
+        on n.resident_id = r.id
+        where n.result = '阳性'
+    </select>
+</mapper>

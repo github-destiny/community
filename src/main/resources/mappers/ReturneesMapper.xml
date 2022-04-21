@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.ReturneesMapper">
+    <insert id="saveManyReturnees">
+        insert into tbl_returnees(name, gender, idCard, address, applyTime, `from`, phone, inoculationTimes, endTime)
+        values
+        <foreach collection="persons" item="person" separator=",">
+            (
+            #{person.name}, #{person.gender}, #{person.idCard}, #{person.address}, #{person.applyTime}, #{person.from},
+            #{person.phone}, #{person.inoculationTimes}, #{persons.endTime}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="saveCities">
+        insert into tbl_cities(province, city, level)
+        values
+        <foreach collection="cities" item="city" separator=",">
+            (
+            #{city.province},#{city.city},#{city.level}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="saveReturnees" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_returnees(name, gender, idCard, address, applyTime, `from`, phone, inoculationTimes, endTime)
+        values (#{name}, #{gender}, #{idCard}, #{address}, #{applyTime}, #{from}, #{phone}, #{inoculationTimes}, #{endTime})
+    </insert>
+    <update id="updateReturnees">
+        update tbl_returnees
+        <trim prefix="set" suffixOverrides=",">
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="result != null and result != ''">
+                result =  #{result},
+            </if>
+            <if test="testTime != null and testTime != ''">
+                testTime = #{testTime},
+            </if>
+        </trim>
+        where id = #{id} or idCard = #{idCard}
+    </update>
+
+    <select id="findReturneesByCondition" resultType="cn.nero.community.domain.vo.ReturneesCityVO">
+        select r.*, c.id as cid, c.province, c.city, c.`level`
+        from tbl_returnees r
+        join tbl_cities c
+        on r.`from` = c.id
+        <where>
+            <if test="returnees.name != null and returnees.name != ''">
+                r.name like concat('%', #{returnees.name}, '%')
+            </if>
+            <if test="returnees.gender != null and returnees.gender != ''">
+                and r.gender = #{returnees.gender}
+            </if>
+            <if test="returnees.address != null and returnees.address != ''">
+                and r.address like concat('%', #{returnees.address}, '%')
+            </if>
+            <if test="returnees.applyTime != null and returnees.applyTime != ''">
+                and r.applyTime > #{returnees.applyTime}
+            </if>
+            <if test="city.province != null and city.province != ''">
+                and c.province like concat('%', #{city.province}, '%')
+            </if>
+            <if test="city.city != null and city.city != ''">
+                and c.city like concat('%', #{city.city}, '%')
+            </if>
+            <if test="city.level != null and city.level != ''">
+                and c.level = #{city.level}
+            </if>
+            <if test="returnees.idCard != null and returnees.idCard != ''">
+                and r.idCard = #{returnees.idCard}
+            </if>
+            <if test="returnees.inoculationTimes != null and returnees.inoculationTimes != ''">
+                and r.inoculationTimes = #{returnees.inoculationTimes}
+            </if>
+            <if test="returnees.phone != null and returnees.phone != ''">
+                and r.phone = #{returnees.phone}
+            </if>
+        </where>
+        order by r.id
+        limit #{skipCount}, #{pageSize}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_returnees r
+        join tbl_cities c
+        on r.`from` = c.id
+        <where>
+            <if test="returnees.name != null and returnees.name != ''">
+                r.name like concat('%', #{returnees.name}, '%')
+            </if>
+            <if test="returnees.gender != null and returnees.gender != ''">
+                and r.gender = #{returnees.gender}
+            </if>
+            <if test="returnees.address != null and returnees.address != ''">
+                and r.address like concat('%', #{returnees.address}, '%')
+            </if>
+            <if test="returnees.applyTime != null and returnees.applyTime != ''">
+                and r.applyTime > #{returnees.applyTime}
+            </if>
+            <if test="city.province != null and city.province != ''">
+                and c.province like concat('%', #{city.province}, '%')
+            </if>
+            <if test="city.city != null and city.city != ''">
+                and c.city like concat('%', #{city.city}, '%')
+            </if>
+            <if test="city.level != null and city.level != ''">
+                and c.level = #{city.level}
+            </if>
+            <if test="returnees.idCard != null and returnees.idCard != ''">
+                and r.idCard = #{returnees.idCard}
+            </if>
+            <if test="returnees.inoculationTimes != null and returnees.inoculationTimes != ''">
+                and r.inoculationTimes = #{returnees.inoculationTimes}
+            </if>
+            <if test="returnees.phone != null and returnees.phone != ''">
+                and r.phone = #{returnees.phone}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDate" resultType="java.lang.String">
+        select ${methodName}('${date}', INTERVAL ${num} ${timeType})
+    </select>
+
+    <select id="getReturneesNucleicAll" resultType="java.lang.Integer">
+        select count(1) from tbl_returnees
+        <where>
+            <if test="result != null and result != ''">
+                result = #{result}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and testTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and testTime &lt;= #{endTime}
+            </if>
+            and endTime &gt; now()
+        </where>
+    </select>
+
+    <select id="getPositiveReturnees" resultType="cn.nero.community.domain.Returnees">
+        select id, name, gender, idCard, address, applyTime, `from`, phone, inoculationTimes, endTime, testTime, result
+        from tbl_returnees
+        where result = '阳性'
+    </select>
+</mapper>
