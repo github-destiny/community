@@ -5,6 +5,7 @@ import cn.nero.community.domain.Returnees;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +44,13 @@ public interface ReturneesService {
      * @return
      */
     Map<String, Object> getReturneesNucleicResult(String startTime, String endTime);
+
+    /**
+     * 获取前n天的返回人数
+     * @param preDay
+     * @return
+     */
+    List<Map<String, Object>> getCountOneDay(String preDay);
 
 
 

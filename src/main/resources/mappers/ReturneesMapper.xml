@@ -147,4 +147,11 @@
         from tbl_returnees
         where result = '阳性'
     </select>
+    <select id="getCountReturneesNum" resultType="cn.nero.community.domain.vo.Count">
+        SELECT DATE_FORMAT(`applyTime`, '%Y-%m-%d') AS days,COUNT(1) AS num
+        FROM tbl_returnees
+        where applyTime &gt;= #{startTime} and applyTime &lt;= #{endTime}
+        GROUP BY DATE_FORMAT(`applyTime`, '%Y-%m-%d')
+        ORDER BY applyTime DESC
+    </select>
 </mapper>

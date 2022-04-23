@@ -2,12 +2,15 @@ package cn.nero.community.mappers;
 
 import cn.nero.community.domain.City;
 import cn.nero.community.domain.Returnees;
+import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.ReturneesCityVO;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -85,6 +88,15 @@ public interface ReturneesMapper {
      * @return
      */
     List<Returnees> getPositiveReturnees();
+
+    /**
+     * 获取一天的人数
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Count> getCountReturneesNum(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
 
 

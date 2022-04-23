@@ -3,6 +3,7 @@ package cn.nero.community.service.impl;
 import cn.nero.community.domain.City;
 import cn.nero.community.domain.Returnees;
 import cn.nero.community.domain.Task;
+import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
 import cn.nero.community.mappers.CityMapper;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +107,44 @@ public class ReturneesServiceImpl implements ReturneesService {
         map.put("negative", negative);
         map.put("positive", positive);
         return map;
+    }
+
+    @Override
+    public List<Map<String, Object>> getCountOneDay(String preDay) {
+        // 获取今天
+        String today = DateTimeUtil.getDate();
+        // 获取preDay天前
+        String startTime = returneesMapper.getDate("DATE_SUB", DateTimeUtil.getDate(), preDay, "DAY");
+        // 统计
+        List<Count> counts = returneesMapper.getCountReturneesNum(startTime, today);
+        log.info("count:{}", counts);
+        // 存放计算多少天
+        List<String> days = new ArrayList<>();
+        days.add(startTime);
+        while(startTime.compareTo(today) < 0){
+            try {
+                startTime = DateTimeUtil.getPreDay(startTime, 1);
+                days.add(startTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (String day : days) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", day);
+            for (Count count : counts) {
+                // 如果查询出的数据为day这一天的数据,说明该天有返回人员
+                if (day.contains(count.getDays())) {
+                    map.put("value", count.getNum());
+                }
+            }
+            if (map.get("value") == null || "".equals(map.get("value"))){
+                map.put("value", 0);
+            }
+            list.add(map);
+        }
+        return list;
     }
 
 

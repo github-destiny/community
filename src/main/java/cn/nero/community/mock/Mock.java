@@ -12,6 +12,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -356,7 +357,13 @@ public class Mock {
 
     /********************Main*********************/
     public static void main(String[] args) throws IOException {
-        System.out.println(getPhone());
+        Calendar instance = Calendar.getInstance();
+        Date date = new Date( 2022, Calendar.MAY, 13);
+        instance.setTime(date);
+        instance.add(Calendar.DAY_OF_MONTH, -1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String format = sdf.format(instance.getTime());
+        System.out.println(format);
     }
 
 }

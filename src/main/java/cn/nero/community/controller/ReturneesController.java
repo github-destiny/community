@@ -8,6 +8,7 @@ import cn.nero.community.service.ReturneesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,5 +50,10 @@ public class ReturneesController {
     public Map<String, Object> getReturneesNucleic(@RequestParam("startTime") String startTime,
                                                    @RequestParam("endTime") String endTime) {
         return returneesService.getReturneesNucleicResult(startTime, endTime);
+    }
+
+    @GetMapping("/get/count")
+    public List<Map<String, Object>> getCountOneDay(String preDay){
+        return returneesService.getCountOneDay(preDay);
     }
 }
