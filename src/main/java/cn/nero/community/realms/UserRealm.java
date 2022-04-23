@@ -1,6 +1,7 @@
 package cn.nero.community.realms;
 
 import cn.nero.community.domain.User;
+import cn.nero.community.exception.AccountLockException;
 import cn.nero.community.service.UserService;
 import cn.nero.community.utils.ApplicationContextUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,9 @@ public class UserRealm extends AuthorizingRealm {
         UserService userService = (UserService) ApplicationContextUtils.getBean("userServiceImpl");
         User user = userService.findUserByAccount(principal);
         if (!ObjectUtils.isEmpty(user)) {
+            if (user.getLockState().contains("封禁")) {
+                throw new AccountLockException("您的账号已被封禁至[" + user.getLockEndTime() + "],如有疑问请联络管理员!");
+            }
             return new SimpleAuthenticationInfo(principal,
                     user.getPassword(), ByteSource.Util.bytes(user.getSalt()), this.getName());
         }

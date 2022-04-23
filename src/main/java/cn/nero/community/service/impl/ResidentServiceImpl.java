@@ -3,6 +3,7 @@ package cn.nero.community.service.impl;
 import cn.nero.community.domain.Inoculation;
 import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.User;
+import cn.nero.community.exception.ResidentException;
 import cn.nero.community.mappers.NucleicMapper;
 import cn.nero.community.mappers.ResidentMapper;
 import cn.nero.community.service.ResidentService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -142,5 +144,14 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public User findUserByResidentId(String residentId) {
         return residentMapper.findUserByResidentId(residentId);
+    }
+
+    @Override
+    public Resident findResidentByIdCard(String idCard) {
+        Resident resident = residentMapper.findResidentByIdCard(idCard);
+        if (ObjectUtils.isEmpty(resident)) {
+            throw new ResidentException("不存在该居民!");
+        }
+        return resident;
     }
 }

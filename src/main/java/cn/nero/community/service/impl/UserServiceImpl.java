@@ -11,6 +11,7 @@ import cn.nero.community.utils.Md5Util;
 import cn.nero.community.utils.SaltUtil;
 import cn.nero.community.utils.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,6 +91,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByAccount(String account) {
         return userMapper.findUserByAccount(account);
+    }
+
+    @Override
+    public void updatePassword(String oldPassword, String newPassword, String account) {
+        User user = userMapper.findUserByAccount(account);
+        String md5OldPwd = Md5Util.getMd5(oldPassword, user.getSalt());
+        if (!md5OldPwd.equals(user.getPassword())) {
+            throw new IncorrectCredentialsException("密码错误!");
+        }
+        String md5NewPwd = Md5Util.getMd5(newPassword, user.getSalt());
+        user.setPassword(md5NewPwd);
+        userMapper.updateUser(user);
+    }
+
+    @Override
+    public void batchUnBlockAccount(List<String> accounts) {
+        userMapper.batchBanUser(accounts, "无", "无", "正常使用");
     }
 
 }

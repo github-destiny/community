@@ -6,6 +6,7 @@ import cn.nero.community.domain.vo.UserVO;
 import cn.nero.community.realms.CustomerToken;
 import cn.nero.community.service.UserService;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,14 @@ public class UserController {
         userService.updateUser(user);
     }
 
+    @PostMapping("/update/password")
+    public String updatePassword(@RequestParam("oldPassword") String oldPassword,
+                               @RequestParam("newPassword") String newPassword,
+                               @RequestParam("account") String account){
+        userService.updatePassword(oldPassword, newPassword, account);
+        return "更新成功";
+    }
+
     @GetMapping("/delete/{condition}")
     @RequiresRoles("admin")
     public void deleteUser(@PathVariable("condition") String condition){
@@ -66,6 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/ban/{account}")
+    @RequiresRoles(value = {"admin", "staff"}, logical = Logical.OR)
     public void banUser(@PathVariable("account") String account){
         userService.banAccount(account);
     }
@@ -73,6 +83,11 @@ public class UserController {
     @GetMapping("/ban/batch")
     public void batchBan(@RequestParam("accounts") List<String> accounts){
         userService.batchBanAccount(accounts, "不当发言");
+    }
+
+    @GetMapping("/unblock/batch")
+    public void batchUnBlockAccount(@RequestParam("accounts") List<String> accounts){
+        userService.batchUnBlockAccount(accounts);
     }
 
 }

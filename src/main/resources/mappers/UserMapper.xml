@@ -20,14 +20,27 @@
             <if test="lockReason != null and lockReason != ''">
                 lockReason = #{lockReason},
             </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="resident_id != null and resident_id != ''">
+                resident_id = #{resident_id}
+            </if>
         </trim>
-        where id = #{id}
+        <where>
+            <if test="id != null and id != ''">
+                id = #{id}
+            </if>
+            <if test="account != null and account != ''">
+                or account = #{account}
+            </if>
+        </where>
     </update>
     <update id="batchBanUser">
         update tbl_user
         <trim prefix="set" suffixOverrides=",">
             <if test="reason != null and reason != ''">
-                reason = #{reason},
+                lockReason = #{reason},
             </if>
             <if test="lockEndTime != null and lockEndTime != ''">
                 lockEndTime = #{lockEndTime},
@@ -53,20 +66,20 @@
         on u.resident_id = r.id
         <where>
             <if test="user.account  != null and user.account != ''">
-                u.account = #{user.account},
+                u.account = #{user.account}
             </if>
             <if test="user.nick_name != null and user.nick_name != ''">
-                u.nick_name like concat('%', #{user.nick_name}, '%'),
+                and u.nick_name like concat('%', #{user.nick_name}, '%')
             </if>
             <if test="user.lockState != null and user.lockState != ''">
-                u.lockState = #{user.lockState},
+                and u.lockState = #{user.lockState}
             </if>
             <if test="user.createTime != null and user.createTime != ''">
-                u.createTime > #{user.createTime},
+                and u.createTime >= #{user.createTime}
             </if>
         </where>
         order by u.id
-        limit by #{skipCount}, #{pageSize}
+        limit #{skipCount}, #{pageSize}
     </select>
 
     <select id="getTotal" resultType="java.lang.Integer">
@@ -76,16 +89,16 @@
         on u.resident_id = r.id
         <where>
             <if test="account  != null and account != ''">
-                u.account = #{account},
+                u.account = #{account}
             </if>
             <if test="nick_name != null and nick_name != ''">
-                u.nick_name like concat('%', #{nick_name}, '%'),
+                and u.nick_name like concat('%', #{nick_name}, '%')
             </if>
             <if test="lockState != null and lockState != ''">
-                u.lockState = #{lockState},
+                and u.lockState = #{lockState}
             </if>
             <if test="createTime != null and createTime != ''">
-                u.createTime > #{createTime},
+                and u.createTime >= #{createTime}
             </if>
         </where>
     </select>

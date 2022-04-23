@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.FamilyMapper">
+    <insert id="saveFamily" useGeneratedKeys="true" keyProperty="id">
+        insert into tbl_family(createBy, createTime)
+        values (#{createBy}, #{createTime})
+    </insert>
+    <insert id="addMemberToFamily">
+        insert into tbl_family_resident(family_id, resident_id)
+        values (#{familyId}, #{residentId})
+    </insert>
+    <insert id="addMembersToFamily">
+        insert into tbl_family_resident (family_id, resident_id)
+        values
+        <foreach collection="residentIds" item="residentId" separator=",">
+            (#{familyId}, #{residentId})
+        </foreach>
+    </insert>
+    <delete id="deleteMemberFromFamily">
+        delete from tbl_family_resident where resident_id = #{residentId} and family_id = #{familyId}
+    </delete>
+    <select id="findFamilyMembers" resultType="cn.nero.community.domain.Resident">
+        select *
+        from tbl_resident
+        where id in (select resident_id from tbl_family_resident where family_id = #{familyId})
+    </select>
+
+    <resultMap id="familyVOMap" type="familyVO">
+        <id column="id" property="familyId"/>
+        <collection property="residents" javaType="java.util.ArrayList" ofType="resident">
+            <id column="residentId" property="id"/>
+            <id column="name" property="name"/>
+            <id column="age" property="age"/>
+            <id column="gender" property="gender"/>
+            <id column="address" property="address"/>
+            <id column="idCard" property="idCard"/>
+            <id column="phone" property="phone"/>
+        </collection>
+    </resultMap>
+
+    <select id="findFamilyVOByFamilyId" resultMap="familyVOMap">
+        select f.id, r.id as residentId, r.`name`, r.age, r.gender, r.address, r.idCard, r.phone
+        from tbl_family f
+        left join tbl_family_resident fr
+        on f.id = fr.family_id
+        left join tbl_resident r
+        on fr.resident_id = r.id
+        where f.id = #{familyId}
+    </select>
+    <select id="findFamilyOwner" resultType="java.lang.String">
+        select r.name
+        from tbl_family f
+        left join tbl_resident r
+        on f.createBy = r.id
+        where f.id = #{familyId}
+    </select>
+    <select id="isExistsMemberInFamily" resultType="java.lang.Integer">
+        select count(1) from tbl_family_resident where family_id = #{familyId} and resident_id = #{residentId}
+    </select>
+
+</mapper>

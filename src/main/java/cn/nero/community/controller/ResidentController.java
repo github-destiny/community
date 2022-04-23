@@ -2,10 +2,9 @@ package cn.nero.community.controller;
 
 import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.User;
-import cn.nero.community.service.ResidentService;
 import cn.nero.community.domain.vo.PaginationVO;
+import cn.nero.community.service.ResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import java.util.Map;
  * @version 1.0.0
  * @Date 2022/4/11
  */
-@Controller
+@RestController
 @RequestMapping("/resident")
 public class ResidentController {
 
@@ -25,27 +24,23 @@ public class ResidentController {
     private ResidentService residentService;
 
     @PostMapping("/save")
-    @ResponseBody
     public String saveResident(Resident resident){
         residentService.saveResident(resident);
         return "success";
     }
 
     @PostMapping("/edit")
-    @ResponseBody
     public String editResident(Resident resident){
         residentService.editResidentInfo(resident);
         return "success";
     }
 
     @GetMapping("/find/user/{userId}")
-    @ResponseBody
     public Resident findResidentByUserId(@PathVariable("userId") String userId){
         return residentService.findResidentByUserId(userId);
     }
 
     @GetMapping("/find")
-    @ResponseBody
     public PaginationVO<Resident> findResidentByCondition(Resident resident,
                                                           @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
                                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
@@ -54,13 +49,11 @@ public class ResidentController {
     }
 
     @GetMapping("/get/age")
-    @ResponseBody
     public List<Map<String,Object>> getAgeGroup(){
         return residentService.getResidentGroupByAge();
     }
 
     @GetMapping("/find/inoculation")
-    @ResponseBody
     public Map<String, Object> findResidentAndInoculationInfo(@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
                                                               @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                                               @RequestParam(value = "resident_id", required = false) String resident_id,
@@ -81,15 +74,18 @@ public class ResidentController {
     }
 
     @GetMapping("/get/times")
-    @ResponseBody
     public List<Map<String, Object>> getEchartsDataAboutInoculationTimes(){
         return residentService.getInoculationData();
     }
 
     @GetMapping("/find/resident/{residentId}")
-    @ResponseBody
     public User findUserByResidentId(@PathVariable("residentId") String residentId){
         return residentService.findUserByResidentId(residentId);
+    }
+
+    @PostMapping("/find/idCard")
+    public Resident findResidentByIdCard(@RequestParam("idCard") String idCard){
+        return residentService.findResidentByIdCard(idCard);
     }
 
 

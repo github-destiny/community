@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.AnnouncementMapper">
+    <insert id="saveAnnouncement">
+        insert into tbl_announcement(title, content, createTime)
+        values (#{title}, #{content}, #{createTime})
+    </insert>
+
+    <update id="updateAnnouncement">
+        update tbl_announcement
+        <trim prefix="set" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAnnouncement">
+        delete from tbl_announcement where id = #{id}
+    </delete>
+    <select id="findAllAnnouncements" resultType="cn.nero.community.domain.Announcement">
+        select id, title, content, createTime
+        from tbl_announcement
+        order by createTime desc
+        limit #{skipCount}, #{pageSize}
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1) from tbl_announcement
+    </select>
+
+
+</mapper>

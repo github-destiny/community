@@ -8,7 +8,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
  * @version 1.0.0
  * @Date 2022/4/6
  */
-@Controller
+@RestController
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -32,7 +31,7 @@ public class AdminController {
         String loginType = "Admin";
         // 登录
         subject.login(new CustomerToken(account, password, loginType));
-        return "index";
+        return "登录成功";
     }
 
     @PostMapping("/register")
@@ -40,11 +39,10 @@ public class AdminController {
         Admin admin = new Admin();
         admin.setAccount(account).setPassword(password).setLockState("2");
         adminService.saveAdmin(admin);
-        return "login";
+        return "注册成功,您的账号已提交进行审核,请耐心等待.";
     }
 
     @GetMapping("/find")
-    @ResponseBody
     @RequiresRoles("admin")
     public PaginationVO<Admin> findAdminByCondition(
             Admin admin,
@@ -58,20 +56,20 @@ public class AdminController {
     public String logout(){
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return "login";
+        return "已成功退出登录.";
     }
 
     @PostMapping("/edit/password")
     @ResponseBody
     public String editPassword(String account, String oldPassword, String newPassword){
         adminService.editPassword(account, oldPassword, newPassword);
-        return "success";
+        return "修改成功";
     }
 
     @GetMapping("/approval")
-    @ResponseBody
     @RequiresRoles("admin")
-    public void approval(@RequestParam("ids") List<String> ids){
+    public String approval(@RequestParam("ids") List<String> ids){
         adminService.approval(ids);
+        return "操作成功";
     }
 }

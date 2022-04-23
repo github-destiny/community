@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.ReserveMapper">
+    <insert id="saveReserve">
+        insert into tbl_reserve(resident_id, num, time, createTime)
+        values (#{resident_id}, #{num}, #{time}, #{createTime})
+    </insert>
+    <update id="updateReserveTime">
+        update tbl_reserve
+        set time = #{time}
+        where resident_id = #{resident_id}
+    </update>
+    <delete id="revokeReserve">
+        delete from tbl_reserve where resident_id = #{residentId}
+    </delete>
+    <select id="findAppointment" resultType="java.lang.String">
+        select time
+        from tbl_appointment
+        order by time desc
+        limit 0, 1
+    </select>
+    <select id="checkReserve" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_reserve r
+        left join tbl_resident re
+        on r.resident_id = re.id
+        left join tbl_inoculation i
+        on re.id = i.resident_id
+        where re.idCard = #{idCard}
+    </select>
+    <select id="statistics" resultType="java.lang.Integer">
+        select count(1) from tbl_reserve where time = #{time}
+    </select>
+    <resultMap id="residentReserveMap" type="residentReserveVO">
+        <id column="id" property="reserveId"/>
+        <result column="num" property="reserveNum"/>
+        <result column="time" property="appointment"/>
+        <result column="residentId" property="residentId"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="gender" property="gender"/>
+        <result column="idCard" property="idCard"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+    <select id="findReserveInfoByIdCard" resultMap="residentReserveMap">
+        select r.id, r.num, r.time, re.id as residentId, re.name, re.age, re.gender, re.phone, re.idCard
+        from tbl_reserve r
+        left join tbl_resident re
+        on r.resident_id = re.id
+        left join tbl_inoculation i
+        on re.id = i.resident_id
+        where re.idCard = #{idCard} or re.id = #{idCard}
+    </select>
+</mapper>

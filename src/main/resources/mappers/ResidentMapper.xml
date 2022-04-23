@@ -184,4 +184,16 @@
         join tbl_user u
         on r.id = u.resident_id
     </select>
+    <select id="findResidentByIdCard" resultType="cn.nero.community.domain.Resident">
+        select id, name, age, gender, idCard, phone
+        from tbl_resident
+        where idCard = #{idCard}
+    </select>
+    <select id="getResidentInoculationNumByResidentId" resultType="java.lang.Integer">
+        select times
+        from tbl_resident r
+        left join tbl_inoculation i
+        on r.id = i.resident_id
+        where r.id = #{residentId} or r.idCard = #{residentId}
+    </select>
 </mapper>

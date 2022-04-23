@@ -1,4 +1,4 @@
-package cn.nero.community.domain;
+package cn.nero.community.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,20 +9,20 @@ import lombok.experimental.Accessors;
 /**
  * @author Nero Claudius
  * @version 1.0.0
- * @Date 2022/4/18
+ * @Date 2022/4/21
  */
 @Data
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
-public class Reserve {
+public class OpinionVO {
 
-    private String id;
-    private String resident_id;
-    private String num;
-    private String time;
+    private String opinionId;
+    private String opinion;
     private String createTime;
-
+    private String userId;
+    private String account;
+    private String nick_name;
 
 }

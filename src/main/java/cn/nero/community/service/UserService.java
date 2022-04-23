@@ -59,6 +59,20 @@ public interface UserService {
      */
     User findUserByAccount(String account);
 
+    /**
+     * 通过账号修改密码
+     * @param oldPassword
+     * @param newPassword
+     * @param account
+     */
+    void updatePassword(String oldPassword, String newPassword, String account);
+
+    /**
+     * 批量解禁账号
+     * @param accounts
+     */
+    void batchUnBlockAccount(List<String> accounts);
+
 
 
 }

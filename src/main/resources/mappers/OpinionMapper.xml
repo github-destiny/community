@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.nero.community.mappers.OpinionMapper">
+    <insert id="saveOpinion">
+        insert into tbl_opinion(user_id, opinion, createTime)
+        values (#{user_id}, #{opinion}, #{createTime})
+    </insert>
+    <select id="findOpinions" resultType="cn.nero.community.domain.vo.OpinionVO">
+        select o.id as opinionId, o.opinion, o.createTime, u.id as userId, u.account, u.nick_name
+        from tbl_opinion o
+        left join tbl_user u
+        on o.user_id = u.id
+        order by createTime desc
+        limit #{skipCount}, #{pageSize}
+    </select>
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(1) from tbl_opinion
+    </select>
+
+
+</mapper>

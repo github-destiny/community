@@ -1,8 +1,13 @@
 package cn.nero.community.handler;
 
+import cn.nero.community.exception.AccountLockException;
+import cn.nero.community.exception.FamilyException;
+import cn.nero.community.exception.ReserveException;
 import cn.nero.community.exception.ResidentException;
 import cn.nero.community.exception.account.AccountAlreadyExistException;
 import cn.nero.community.exception.account.AccountStateException;
+import cn.nero.community.response.ResponseEnum;
+import cn.nero.community.response.ResultData;
 import cn.nero.community.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -22,6 +27,10 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class CommunityExceptionHandler {
+
+    private static final String WARN = "WARN";
+    private static final String ERROR = "ERROR";
+    private static final String INFO = "INFO";
 
     @ExceptionHandler(AccountStateException.class)
     public String accountStateHandler(Exception e){
@@ -48,27 +57,44 @@ public class CommunityExceptionHandler {
     }
 
     @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
-    public Map<String, Object> ArgumentExceptionHandler(Exception e){
+    public ResultData<String> ArgumentExceptionHandler(Exception e){
         e.printStackTrace();
-        return ResponseUtil.getResponse("参数有误,请查看日志!", "error");
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), "参数有误,请查看日志!");
     }
 
     @ExceptionHandler(ResidentException.class)
-    public String ResidentException(Exception e){
+    public ResultData<String> ResidentException(ResidentException e){
         e.printStackTrace();
-        return e.getMessage();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(SQLException.class)
-    public Map<String, Object> SQLException(Exception e){
+    public ResultData<String> SQLException(Exception e){
         e.printStackTrace();
-        return ResponseUtil.getResponse("SQL异常,请检查相应SQL", "error");
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), "SQL异常,请检查相应SQL");
     }
 
     @ExceptionHandler(AuthorizationException.class)
-    public Map<String, Object> authorizationException(Exception e){
+    public ResultData<String> authorizationException(Exception e){
         e.printStackTrace();
-        return ResponseUtil.getResponse("您的账号暂时无该权限,请联系管理员提升对应权限后在进行操作!", "warn");
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), "您的账号暂时无该权限,请联系管理员提升对应权限后在进行操作!");
     }
 
+    @ExceptionHandler(AccountLockException.class)
+    public ResultData<String> accountLockException(AccountLockException e){
+        e.printStackTrace();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(FamilyException.class)
+    public ResultData<String> familyException(FamilyException e){
+        e.printStackTrace();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(ReserveException.class)
+    public ResultData<String> reserveException(ReserveException e){
+        e.printStackTrace();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), e.getMessage());
+    }
 }

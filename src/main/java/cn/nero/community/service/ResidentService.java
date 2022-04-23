@@ -74,4 +74,11 @@ public interface ResidentService {
      */
     User findUserByResidentId(String residentId);
 
+    /**
+     * 通过身份证号查找居民的部分信息
+     * @param idCard
+     * @return
+     */
+    Resident findResidentByIdCard(String idCard);
+
 }

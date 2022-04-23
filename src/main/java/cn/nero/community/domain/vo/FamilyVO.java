@@ -1,28 +1,28 @@
-package cn.nero.community.domain;
+package cn.nero.community.domain.vo;
 
+import cn.nero.community.domain.Resident;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @author Nero Claudius
  * @version 1.0.0
- * @Date 2022/4/18
+ * @Date 2022/4/21
  */
 @Data
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
-public class Reserve {
+public class FamilyVO {
 
-    private String id;
-    private String resident_id;
-    private String num;
-    private String time;
-    private String createTime;
-
+    private String familyId;
+    private String createBy;
+    private List<Resident> residents;
 
 }

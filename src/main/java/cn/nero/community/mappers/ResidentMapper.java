@@ -106,4 +106,17 @@ public interface ResidentMapper {
      * @return
      */
     User findUserByResidentId(String residentId);
+
+    /**
+     * 通过身份证号查询用户部分信息,结合家庭关联时使用
+     * @param idCard
+     * @return
+     */
+    Resident findResidentByIdCard(String idCard);
+
+    /**
+     * 通过居民id查询他接种了几针
+     * @return
+     */
+    int getResidentInoculationNumByResidentId(String residentId);
 }
