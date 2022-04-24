@@ -11,6 +11,7 @@ import cn.nero.community.mappers.ReturneesMapper;
 import cn.nero.community.mappers.TaskMapper;
 import cn.nero.community.service.ReturneesService;
 import cn.nero.community.utils.DateTimeUtil;
+import cn.nero.community.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class ReturneesServiceImpl implements ReturneesService {
     }
 
     @Override
-    public void saveReturnees(Returnees returnees) {
+    public Map<String, Object> saveReturnees(Returnees returnees) {
         // 注入申请时间
         returnees.setApplyTime(DateTimeUtil.getTime());
         // 创建任务信息
@@ -79,6 +80,7 @@ public class ReturneesServiceImpl implements ReturneesService {
         task.setState("未接受");
         // 保存任务信息
         taskMapper.saveTask(task);
+        return ResponseUtil.getMap("id", returnees.getId());
     }
 
     @Override

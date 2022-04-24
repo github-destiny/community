@@ -30,7 +30,7 @@ public interface ReturneesService {
      * 保存返乡人员信息
      * @param returnees
      */
-    void saveReturnees(Returnees returnees);
+    Map<String, Object> saveReturnees(Returnees returnees);
 
     /**
      * 更新反向人员信息

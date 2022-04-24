@@ -18,7 +18,7 @@ public interface ResidentService {
      * 创建居民信息
      * @param resident
      */
-    void saveResident(Resident resident);
+    Map<String, Object> saveResident(Resident resident);
 
     /**
      * 修改居民信息

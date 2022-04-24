@@ -5,6 +5,7 @@ import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.UserVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -17,7 +18,7 @@ public interface UserService {
      * 创建用户账号
      * @param user
      */
-    void saveUser(User user);
+    Map<String, Object> saveUser(User user);
 
     /**
      * 更新用户账号

@@ -5,7 +5,7 @@
         insert into tbl_nucleic(resident_id, result, time)
         values (#{resident_id}, #{result}, #{time})
     </insert>
-    <insert id="saveNucleicByResidentIdColumn">
+    <insert id="saveNucleicByResidentIdColumn" keyProperty="id" useGeneratedKeys="true">
         insert into tbl_nucleic(resident_id)
         values (#{residentId})
     </insert>

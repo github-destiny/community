@@ -8,6 +8,7 @@ import cn.nero.community.mappers.AdminMapper;
 import cn.nero.community.service.AdminService;
 import cn.nero.community.utils.DateTimeUtil;
 import cn.nero.community.utils.Md5Util;
+import cn.nero.community.utils.ResponseUtil;
 import cn.nero.community.utils.SaltUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -39,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void saveAdmin(Admin admin) {
+    public Map<String, Object> saveAdmin(Admin admin) {
         // 查询账号是否存在
         Admin info = adminMapper.findAdminByAccount(admin.getAccount());
         if (!ObjectUtils.isEmpty(info)){
@@ -59,6 +60,7 @@ public class AdminServiceImpl implements AdminService {
         admin.setCreateTime(DateTimeUtil.getTime());
         // 注入数据库
         adminMapper.saveAdmin(admin);
+        return ResponseUtil.getMap("id", admin.getId());
     }
 
     @Override

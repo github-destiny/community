@@ -24,9 +24,8 @@ public class ResidentController {
     private ResidentService residentService;
 
     @PostMapping("/save")
-    public String saveResident(Resident resident){
-        residentService.saveResident(resident);
-        return "success";
+    public Map<String, Object> saveResident(Resident resident){
+        return residentService.saveResident(resident);
     }
 
     @PostMapping("/edit")

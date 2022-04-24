@@ -34,8 +34,8 @@ public class ReturneesController {
     }
 
     @PostMapping("/save")
-    public void saveReturnees(Returnees returnees){
-        returneesService.saveReturnees(returnees);
+    public Map<String, Object> saveReturnees(Returnees returnees){
+        return returneesService.saveReturnees(returnees);
     }
 
     @GetMapping("/update/nucleic")

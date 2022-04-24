@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -35,11 +36,12 @@ public class AdminController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam("account") String account, @RequestParam("password") String password) {
+    public Map<String, Object> register(@RequestParam("account") String account, @RequestParam("password") String password) {
         Admin admin = new Admin();
         admin.setAccount(account).setPassword(password).setLockState("2");
-        adminService.saveAdmin(admin);
-        return "注册成功,您的账号已提交进行审核,请耐心等待.";
+        Map<String, Object> map = adminService.saveAdmin(admin);
+        map.put("msg", "注册成功,您的账号已提交进行审核,请耐心等待.");
+        return map;
     }
 
     @GetMapping("/find")

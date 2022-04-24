@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void saveUser(User user){
-        userService.saveUser(user);
+    public Map<String, Object> saveUser(User user){
+        return userService.saveUser(user);
     }
 
     @PostMapping("/update")

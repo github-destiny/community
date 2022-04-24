@@ -4,6 +4,7 @@ import cn.nero.community.domain.Admin;
 import cn.nero.community.domain.vo.PaginationVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -23,7 +24,7 @@ public interface AdminService {
      * 注册接口,保存管理员
      * @param admin
      */
-    void saveAdmin(Admin admin);
+    Map<String, Object> saveAdmin(Admin admin);
 
     /**
      * 通过条件查找Admin信息

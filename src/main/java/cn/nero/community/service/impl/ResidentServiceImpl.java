@@ -9,6 +9,7 @@ import cn.nero.community.mappers.ResidentMapper;
 import cn.nero.community.service.ResidentService;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ResidentInoculationVO;
+import cn.nero.community.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,11 +38,12 @@ public class ResidentServiceImpl implements ResidentService {
     private NucleicMapper nucleicMapper;
 
     @Override
-    public void saveResident(Resident resident) {
+    public Map<String, Object> saveResident(Resident resident) {
         // 创建resident
         residentMapper.saveResident(resident);
         // 在核酸检测登记表中添加对应的数据记录
         nucleicMapper.saveNucleicByResidentIdColumn(resident.getId());
+        return ResponseUtil.getMap("id", resident.getId());
     }
 
     @Override

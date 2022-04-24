@@ -17,4 +17,14 @@ public class ResponseUtil {
         return map;
     }
 
+    public static Map<String, Object> getMap(){
+        return new HashMap<>();
+    }
+
+    public static Map<String, Object> getMap(String key, Object value){
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
+    }
+
 }

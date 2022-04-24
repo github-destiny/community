@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.nero.community.mappers.ReturneesMapper">
-    <insert id="saveManyReturnees">
+    <insert id="saveManyReturnees" useGeneratedKeys="true" keyProperty="id">
         insert into tbl_returnees(name, gender, idCard, address, applyTime, `from`, phone, inoculationTimes, endTime)
         values
         <foreach collection="persons" item="person" separator=",">

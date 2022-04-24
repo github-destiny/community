@@ -6,10 +6,7 @@ import cn.nero.community.domain.vo.UserVO;
 import cn.nero.community.mappers.ReturneesMapper;
 import cn.nero.community.mappers.UserMapper;
 import cn.nero.community.service.UserService;
-import cn.nero.community.utils.DateTimeUtil;
-import cn.nero.community.utils.Md5Util;
-import cn.nero.community.utils.SaltUtil;
-import cn.nero.community.utils.UUIDUtil;
+import cn.nero.community.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -35,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private ReturneesMapper returneesMapper;
 
     @Override
-    public void saveUser(User user) {
+    public Map<String, Object> saveUser(User user) {
         // 密码加密
         String plaintextPwd = user.getPassword();
         String salt = SaltUtil.getSalt();
@@ -51,6 +49,7 @@ public class UserServiceImpl implements UserService {
                 .setPassword(md5Pwd)
                 .setSalt(salt);
         userMapper.saveUser(user);
+        return ResponseUtil.getMap("id", user.getId());
     }
 
     @Override
