@@ -25,11 +25,11 @@ public class StaffServiceImpl implements StaffService {
     private StaffMapper staffMapper;
 
     @Override
-    public void saveStaff(Staff staff) {
+    public String saveStaff(Staff staff) {
         // 设置审核状态
         staff.setState("2");
         staffMapper.saveStaffInfo(staff);
-        log.info("staff id:[{}]", staff.getId());
+        return staff.getId();
     }
 
     @Override

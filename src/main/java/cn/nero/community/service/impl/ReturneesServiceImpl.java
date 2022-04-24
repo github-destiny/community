@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Nero Claudius
@@ -117,9 +114,11 @@ public class ReturneesServiceImpl implements ReturneesService {
         String startTime = returneesMapper.getDate("DATE_SUB", DateTimeUtil.getDate(), preDay, "DAY");
         // 统计
         List<Count> counts = returneesMapper.getCountReturneesNum(startTime, today);
-        log.info("count:{}", counts);
         // 存放计算多少天
         List<String> days = new ArrayList<>();
+        // 总容器
+        List<Map<String, Object>> list = new ArrayList<>();
+        // 添加天数操作
         days.add(startTime);
         while(startTime.compareTo(today) < 0){
             try {
@@ -129,7 +128,7 @@ public class ReturneesServiceImpl implements ReturneesService {
                 e.printStackTrace();
             }
         }
-        List<Map<String, Object>> list = new ArrayList<>();
+        // 查询数据
         for (String day : days) {
             Map<String, Object> map = new HashMap<>();
             map.put("name", day);
@@ -145,6 +144,11 @@ public class ReturneesServiceImpl implements ReturneesService {
             list.add(map);
         }
         return list;
+    }
+
+    @Override
+    public List<Count> getReturneesInoculationTimes() {
+        return returneesMapper.getInoculationTimes();
     }
 
 

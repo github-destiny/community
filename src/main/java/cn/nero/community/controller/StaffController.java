@@ -1,20 +1,21 @@
 package cn.nero.community.controller;
 
 import cn.nero.community.domain.Staff;
-import cn.nero.community.service.StaffService;
 import cn.nero.community.domain.vo.PaginationVO;
+import cn.nero.community.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
  * @version 1.0.0
  * @Date 2022/4/10
  */
-@Controller
+@RestController
 @RequestMapping("/staff")
 public class StaffController {
 
@@ -22,25 +23,24 @@ public class StaffController {
     private StaffService staffService;
 
     @PostMapping("/save")
-    @ResponseBody
-    public void save(Staff staff){
-        staffService.saveStaff(staff);
+    public Map<String, Object> save(Staff staff){
+        String id = staffService.saveStaff(staff);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        return map;
     }
 
     @PostMapping("/edit")
-    @ResponseBody
     public void editStaffInfo(Staff staff) {
         staffService.editStaff(staff);
     }
 
     @GetMapping("/find/admin/{condition}")
-    @ResponseBody
     public Staff findStaffByAdmin(@PathVariable("condition") String condition){
         return staffService.findStaffByAdminIdOrAccount(condition);
     }
 
     @GetMapping("/find")
-    @ResponseBody
     public PaginationVO<Staff> findStaffsByStaffCondition(
             Staff staff,
             @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
@@ -51,7 +51,6 @@ public class StaffController {
     }
 
     @GetMapping("/approval")
-    @ResponseBody
     public void batchApproval(@RequestParam("ids") List<String> ids){
         staffService.batchUpdateStaffLockState(ids);
     }

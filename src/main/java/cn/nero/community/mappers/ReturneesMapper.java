@@ -98,6 +98,12 @@ public interface ReturneesMapper {
      */
     List<Count> getCountReturneesNum(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
+    /**
+     * 获取返乡人员接种人数
+     * @return
+     */
+    List<Count> getInoculationTimes();
+
 
 
 }

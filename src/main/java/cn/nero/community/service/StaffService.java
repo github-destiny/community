@@ -16,7 +16,7 @@ public interface StaffService {
      * 创建工作人员
      * @param staff
      */
-    void saveStaff(Staff staff);
+    String saveStaff(Staff staff);
 
     /**
      * 修改工作人员信息

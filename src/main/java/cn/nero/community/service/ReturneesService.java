@@ -2,6 +2,7 @@ package cn.nero.community.service;
 
 import cn.nero.community.domain.City;
 import cn.nero.community.domain.Returnees;
+import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
 
@@ -51,6 +52,12 @@ public interface ReturneesService {
      * @return
      */
     List<Map<String, Object>> getCountOneDay(String preDay);
+
+    /**
+     * 获取返乡人员的接种情况
+     * @return
+     */
+    List<Count> getReturneesInoculationTimes();
 
 
 

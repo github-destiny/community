@@ -2,6 +2,7 @@ package cn.nero.community.controller;
 
 import cn.nero.community.domain.City;
 import cn.nero.community.domain.Returnees;
+import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
 import cn.nero.community.service.ReturneesService;
@@ -55,5 +56,10 @@ public class ReturneesController {
     @GetMapping("/get/count")
     public List<Map<String, Object>> getCountOneDay(String preDay){
         return returneesService.getCountOneDay(preDay);
+    }
+
+    @GetMapping("/get/inoculation/times")
+    public List<Count> getReturneesInoculationTimes(){
+        return returneesService.getReturneesInoculationTimes();
     }
 }

@@ -154,4 +154,9 @@
         GROUP BY DATE_FORMAT(`applyTime`, '%Y-%m-%d')
         ORDER BY applyTime DESC
     </select>
+    <select id="getInoculationTimes" resultType="cn.nero.community.domain.vo.Count">
+        select inoculationTimes as days, count(1) as num from tbl_returnees
+        where inoculationTimes in (select DISTINCT inoculationTimes from tbl_inoculation)
+        group by inoculationTimes
+    </select>
 </mapper>
