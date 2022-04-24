@@ -36,9 +36,11 @@ public class AdminController {
     }
 
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestParam("account") String account, @RequestParam("password") String password) {
+    public Map<String, Object> register(@RequestParam("account") String account,
+                                        @RequestParam("password") String password,
+                                        @RequestParam("staffId") String staffId) {
         Admin admin = new Admin();
-        admin.setAccount(account).setPassword(password).setLockState("2");
+        admin.setAccount(account).setPassword(password).setLockState("2").setStaff_id(staffId);
         Map<String, Object> map = adminService.saveAdmin(admin);
         map.put("msg", "注册成功,您的账号已提交进行审核,请耐心等待.");
         return map;

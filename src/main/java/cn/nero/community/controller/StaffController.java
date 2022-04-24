@@ -2,6 +2,7 @@ package cn.nero.community.controller;
 
 import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
+import cn.nero.community.domain.vo.StaffAdminVO;
 import cn.nero.community.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,13 @@ public class StaffController {
     @GetMapping("/approval")
     public void batchApproval(@RequestParam("ids") List<String> ids){
         staffService.batchUpdateStaffLockState(ids);
+    }
+
+    @GetMapping("/find/staff/admin")
+    public PaginationVO<StaffAdminVO> findStaffAdminVO(@RequestParam(value = "state", required = false, defaultValue = "2") String state,
+                                                       @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
+                                                       @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
+        return staffService.findStaffAdminVO(state, (pageNo - 1) * pageSize, pageSize);
     }
 
 }

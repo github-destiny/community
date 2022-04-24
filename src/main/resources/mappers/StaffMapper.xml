@@ -95,5 +95,24 @@
             </if>
         </where>
     </select>
+    <select id="findStaffAdminList" resultType="cn.nero.community.domain.vo.StaffAdminVO">
+        select a.id as adminId, a.account, a.createTime, s.id as staffId, s.name, s.age, s.gender, s.idCard, s.phone, j.job, s.state
+        from tbl_staff s
+        left join tbl_admin a
+        on a.staff_id = s.id
+        left join tbl_job j
+        on s.job_id = j.id
+        where state = #{state}
+        limit #{skipCount}, #{pageSize}
+    </select>
+    <select id="getStaffAdminVOTotal" resultType="java.lang.Integer">
+        select count(1)
+        from tbl_staff s
+        left join tbl_admin a
+        on a.staff_id = s.id
+        left join tbl_job j
+        on s.job_id = j.id
+        where state = #{state}
+    </select>
 
 </mapper>

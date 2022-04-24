@@ -1,6 +1,8 @@
 package cn.nero.community.service.impl;
 
 import cn.nero.community.domain.Staff;
+import cn.nero.community.domain.vo.StaffAdminVO;
+import cn.nero.community.mappers.AdminMapper;
 import cn.nero.community.mappers.StaffMapper;
 import cn.nero.community.service.StaffService;
 import cn.nero.community.domain.vo.PaginationVO;
@@ -23,6 +25,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private StaffMapper staffMapper;
+
+    @Autowired
+    private AdminMapper adminMapper;
 
     @Override
     public String saveStaff(Staff staff) {
@@ -51,6 +56,16 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void batchUpdateStaffLockState(List<String> ids) {
+        // 批量审核staff账号,修改审核状态为可用
         staffMapper.batchUpdateStaffState(ids);
+        // 批量修改admin账号的审核状态为可用
+        adminMapper.approvalByStaffId(ids);
+    }
+
+    @Override
+    public PaginationVO<StaffAdminVO> findStaffAdminVO(String state, Integer skipCount, Integer pageSize) {
+        List<StaffAdminVO> dataList = staffMapper.findStaffAdminList(state, skipCount, pageSize);
+        int total = staffMapper.getStaffAdminVOTotal(state);
+        return new PaginationVO<>(dataList, total);
     }
 }

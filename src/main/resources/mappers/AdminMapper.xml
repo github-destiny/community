@@ -3,8 +3,8 @@
 <mapper namespace="cn.nero.community.mappers.AdminMapper">
 
     <insert id="saveAdmin" useGeneratedKeys="true" keyProperty="id">
-        insert into tbl_admin(account, password, salt, lockState, role, createTime)
-        values(#{account}, #{password}, #{salt}, #{lockState}, #{role}, #{createTime})
+        insert into tbl_admin(account, password, salt, lockState, role, createTime, staff_id)
+        values(#{account}, #{password}, #{salt}, #{lockState}, #{role}, #{createTime}, #{staff_id})
     </insert>
 
     <update id="editAdmin">
@@ -26,6 +26,13 @@
     <update id="approval">
         update tbl_admin set lockState = '1'
         where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="approvalByStaffId">
+        update tbl_admin set lockState = '1'
+        where staff_id in
         <foreach collection="ids" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>

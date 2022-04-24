@@ -1,6 +1,7 @@
 package cn.nero.community.mappers;
 
 import cn.nero.community.domain.Staff;
+import cn.nero.community.domain.vo.StaffAdminVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -54,5 +55,19 @@ public interface StaffMapper {
      * @param ids
      */
     void batchUpdateStaffState(@Param("ids") List<String> ids);
+
+    /**
+     * 查看工作人员信息与账号之间的关联
+     *
+     * @return
+     */
+    List<StaffAdminVO> findStaffAdminList(@Param("state") String state, @Param("skipCount") Integer skipCount, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 查看工作人员信息与账号之间列表的总数
+     * @param state
+     * @return
+     */
+    int getStaffAdminVOTotal(String state);
 
 }

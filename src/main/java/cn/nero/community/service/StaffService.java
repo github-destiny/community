@@ -2,6 +2,7 @@ package cn.nero.community.service;
 
 import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
+import cn.nero.community.domain.vo.StaffAdminVO;
 
 import java.util.List;
 
@@ -44,5 +45,12 @@ public interface StaffService {
      * @param ids
      */
     void batchUpdateStaffLockState(List<String> ids);
+
+    /**
+     *
+     * @param state
+     * @return
+     */
+    PaginationVO<StaffAdminVO> findStaffAdminVO(String state, Integer skipCount, Integer pageSize);
 
 }

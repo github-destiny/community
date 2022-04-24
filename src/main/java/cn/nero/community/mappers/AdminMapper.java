@@ -26,6 +26,12 @@ public interface AdminMapper {
 
     void approval(@Param("ids") List<String> ids);
 
+    /**
+     * 批量审核admin账号通过工作人员id
+     * @param ids
+     */
+    void approvalByStaffId(@Param("ids") List<String> ids);
+
     int getTotal(Admin admin);
 
     String findRoleByAccount(String account);
