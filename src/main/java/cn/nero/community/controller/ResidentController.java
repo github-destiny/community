@@ -1,12 +1,20 @@
 package cn.nero.community.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.User;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.service.ResidentService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +93,26 @@ public class ResidentController {
     @PostMapping("/find/idCard")
     public Resident findResidentByIdCard(@RequestParam("idCard") String idCard){
         return residentService.findResidentByIdCard(idCard);
+    }
+
+    @GetMapping("/export")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        response.setHeader("content-disposition", "attachment;fileName=" + URLEncoder.encode("居民信息.xls", StandardCharsets.UTF_8));
+        Workbook workbook = null;
+        ServletOutputStream oos = null;
+        try {
+            List<Resident> residents = residentService.findAllResident();
+            workbook = ExcelExportUtil.exportExcel(new ExportParams("社区居民信息", "居民信息"), Resident.class, residents);
+            oos = response.getOutputStream();
+            workbook.write(oos);
+        } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+            if (oos != null) {
+                oos.close();
+            }
+        }
     }
 
 

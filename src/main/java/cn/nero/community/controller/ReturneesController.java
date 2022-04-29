@@ -1,14 +1,22 @@
 package cn.nero.community.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.nero.community.domain.City;
 import cn.nero.community.domain.Returnees;
 import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
 import cn.nero.community.service.ReturneesService;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -61,5 +69,27 @@ public class ReturneesController {
     @GetMapping("/get/inoculation/times")
     public List<Count> getReturneesInoculationTimes(){
         return returneesService.getReturneesInoculationTimes();
+    }
+
+    @GetMapping("/export")
+    public void exportExcel(HttpServletResponse response) throws IOException {
+        response.setHeader("content-disposition", "attachment;fileName=" + URLEncoder.encode("外来人员.xls", StandardCharsets.UTF_8));
+        List<ReturneesCityVO> dataList = returneesService.findAllReturnees();
+        ServletOutputStream oos = null;
+        Workbook workbook = null;
+        try {
+            workbook = ExcelExportUtil.exportExcel(new ExportParams("外来人员列表", "外来人员"), ReturneesCityVO.class, dataList);
+            oos = response.getOutputStream();
+            workbook.write(oos);
+            workbook.close();
+            oos.close();
+        } finally {
+            if (workbook != null) {
+                workbook.close();
+            }
+            if (oos != null) {
+                oos.close();
+            }
+        }
     }
 }

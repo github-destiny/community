@@ -153,5 +153,10 @@ public class ReturneesServiceImpl implements ReturneesService {
         return returneesMapper.getInoculationTimes();
     }
 
+    @Override
+    public List<ReturneesCityVO> findAllReturnees() {
+        return returneesMapper.findAllReturnees();
+    }
+
 
 }

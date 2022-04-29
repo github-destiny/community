@@ -29,6 +29,11 @@ public class CommunityAOP {
 
     }
 
+    @Pointcut("execution(* cn.nero.community.service.*.*(..))")
+    public void afterServicePoint(){
+
+    }
+
     @Before("beforePoint()")
     public void beforeAdvice(JoinPoint joinPoint){
         log.info("============Log Start================");
@@ -38,12 +43,9 @@ public class CommunityAOP {
         log.info("============Log End================");
     }
 
-    @AfterReturning(pointcut = "beforePoint()", returning = "result")
-    public Map<String, Object> afterAdvice(Object result){
-        log.info("后置通知参数:[{}]", result);
-        Map<String, Object> map = new HashMap<>();
-        map.put("result", "success");
-        return map;
+    @AfterReturning(pointcut = "afterServicePoint()", returning = "result")
+    public void afterAdvice(Object result){
+        log.info("服务层查询结果:[{}]", result);
     }
 
 }

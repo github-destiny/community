@@ -3,6 +3,7 @@ package cn.nero.community.service;
 import cn.nero.community.domain.vo.FamilyVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface FamilyService {
 
-    void createFamily(String createBy);
+    Map<String, Object> createFamily(String createBy);
 
     void addMemberToFamily(String familyId, String residentId);
 

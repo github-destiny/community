@@ -104,6 +104,12 @@ public interface ReturneesMapper {
      */
     List<Count> getInoculationTimes();
 
+    /**
+     * 查询所有的返乡人员
+     * @return
+     */
+    List<ReturneesCityVO> findAllReturnees();
+
 
 
 }

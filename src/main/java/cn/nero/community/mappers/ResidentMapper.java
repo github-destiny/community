@@ -119,4 +119,11 @@ public interface ResidentMapper {
      * @return
      */
     int getResidentInoculationNumByResidentId(String residentId);
+
+    /**
+     * 查询所有的居民
+     * @return
+     */
+    List<Resident> findAllResident();
+
 }

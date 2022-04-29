@@ -7,7 +7,7 @@
     </insert>
     <insert id="saveNucleicByResidentIdColumn" keyProperty="id" useGeneratedKeys="true">
         insert into tbl_nucleic(resident_id)
-        values (#{residentId})
+        values (#{resident_id})
     </insert>
     <update id="editNucleic">
         update tbl_nucleic

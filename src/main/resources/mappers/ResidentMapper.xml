@@ -196,4 +196,8 @@
         on r.id = i.resident_id
         where r.id = #{residentId} or r.idCard = #{residentId}
     </select>
+    <select id="findAllResident" resultType="cn.nero.community.domain.Resident">
+        select id, idCard, name, age, gender, address, phone, state
+        from tbl_resident
+    </select>
 </mapper>

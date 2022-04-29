@@ -1,6 +1,7 @@
 package cn.nero.community.service.impl;
 
 import cn.nero.community.domain.Inoculation;
+import cn.nero.community.domain.Nucleic;
 import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.User;
 import cn.nero.community.exception.ResidentException;
@@ -42,7 +43,9 @@ public class ResidentServiceImpl implements ResidentService {
         // 创建resident
         residentMapper.saveResident(resident);
         // 在核酸检测登记表中添加对应的数据记录
-        nucleicMapper.saveNucleicByResidentIdColumn(resident.getId());
+        Nucleic nucleic = new Nucleic();
+        nucleic.setResident_id(resident.getId());
+        nucleicMapper.saveNucleicByResidentIdColumn(nucleic);
         return ResponseUtil.getMap("id", resident.getId());
     }
 
@@ -155,5 +158,10 @@ public class ResidentServiceImpl implements ResidentService {
             throw new ResidentException("不存在该居民!");
         }
         return resident;
+    }
+
+    @Override
+    public List<Resident> findAllResident() {
+        return residentMapper.findAllResident();
     }
 }

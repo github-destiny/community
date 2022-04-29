@@ -6,6 +6,8 @@ import cn.nero.community.service.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * @author Nero Claudius
  * @version 1.0.0
@@ -19,8 +21,8 @@ public class FamilyController {
     private FamilyService familyService;
 
     @PostMapping("/save")
-    public void saveFamily(String createBy){
-        familyService.createFamily(createBy);
+    public Map<String, Object> saveFamily(String createBy){
+        return familyService.createFamily(createBy);
     }
 
     @PostMapping("/add/member")

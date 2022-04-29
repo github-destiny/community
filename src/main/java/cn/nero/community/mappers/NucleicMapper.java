@@ -27,7 +27,7 @@ public interface NucleicMapper {
      * 通过residentId列进行保存,通常是用于简化保存
      * @param residentId
      */
-    void saveNucleicByResidentIdColumn(String residentId);
+    void saveNucleicByResidentIdColumn(Nucleic nucleic);
 
     /**
      * 更新核酸检测结果

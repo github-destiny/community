@@ -81,4 +81,10 @@ public interface ResidentService {
      */
     Resident findResidentByIdCard(String idCard);
 
+    /**
+     * 查询所有的居民
+     * @return
+     */
+    List<Resident> findAllResident();
+
 }

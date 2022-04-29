@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -27,13 +29,16 @@ public class FamilyServiceImpl implements FamilyService {
     private FamilyMapper familyMapper;
 
     @Override
-    public void createFamily(String createBy) {
+    public Map<String, Object> createFamily(String createBy) {
         // 创建一个家庭,注入创建时间以及创建人属性
         Family family = new Family();
         family.setCreateTime(DateTimeUtil.getTime()).setCreateBy(createBy);
         familyMapper.saveFamily(family);
         // 自动将创建人添加到家庭中
         familyMapper.addMemberToFamily(family.getId(), createBy);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", family.getId());
+        return map;
     }
 
     @Override

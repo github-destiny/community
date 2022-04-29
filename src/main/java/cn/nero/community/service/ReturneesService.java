@@ -59,6 +59,12 @@ public interface ReturneesService {
      */
     List<Count> getReturneesInoculationTimes();
 
+    /**
+     * 查询所有的返乡人员信息
+     * @return
+     */
+    List<ReturneesCityVO> findAllReturnees();
+
 
 
 

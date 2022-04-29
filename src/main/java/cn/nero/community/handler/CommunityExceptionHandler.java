@@ -10,12 +10,14 @@ import cn.nero.community.response.ResponseEnum;
 import cn.nero.community.response.ResultData;
 import cn.nero.community.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.exceptions.IbatisException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -97,4 +99,18 @@ public class CommunityExceptionHandler {
         e.printStackTrace();
         return ResultData.failure(ResponseEnum.FAILURE.getCode(), e.getMessage());
     }
+
+    @ExceptionHandler(IbatisException.class)
+    public ResultData<String> ibatisException(IbatisException e){
+        e.printStackTrace();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), "Mybatis出现异常!请查看日志!");
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResultData<String> ioExceptionHandler(IOException e){
+        e.printStackTrace();
+        return ResultData.failure(ResponseEnum.FAILURE.getCode(), "IO异常,请检查后台日志!");
+    }
+
+
 }

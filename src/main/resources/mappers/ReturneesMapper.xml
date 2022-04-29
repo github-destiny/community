@@ -159,4 +159,12 @@
         where inoculationTimes in (select DISTINCT inoculationTimes from tbl_inoculation)
         group by inoculationTimes
     </select>
+    <select id="findAllReturnees" resultType="cn.nero.community.domain.vo.ReturneesCityVO">
+        select r.id, r.name, r.gender, r.idCard, r.address, r.applyTime, c.id as cid, c.level, c.province, c.city, r.phone, r.inoculationTimes
+        from tbl_returnees r
+        left join tbl_cities c
+        on r.`from` = c.id
+    </select>
+
+
 </mapper>
