@@ -36,7 +36,7 @@ public class ResidentController {
         return residentService.saveResident(resident);
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/update")
     public String editResident(Resident resident){
         residentService.editResidentInfo(resident);
         return "success";

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,21 +33,21 @@ public class NucleicController {
     }
 
     @GetMapping("/update/batch/resident")
-    public void batchUpdateNucleic(@RequestParam("ids") List<String> ids,
+    public void batchUpdateNucleic(@RequestParam(value = "ids", required = false) List<String> ids,
                                    @RequestParam("result") String result,
                                    @RequestParam("time") String time){
         nucleicService.batchUpdateNucleic(ids, result, time);
     }
 
     @GetMapping("/update/batch/returnees")
-    public void batchUpdateReturneesNucleic(@RequestParam("ids") List<String> ids,
+    public void batchUpdateReturneesNucleic(@RequestParam(value = "ids", required = false) List<String> ids,
                                             @RequestParam("time") String testTime,
                                             @RequestParam("result") String result){
         nucleicService.batchUpdateReturneesNucleic(ids, testTime, result);
     }
 
     @GetMapping("/find")
-    public ResidentNucleicVO findNucleicResultByResidentInfo(@RequestParam(value = "id", required = false) String id,
+    public Map<String, Object> findNucleicResultByResidentInfo(@RequestParam(value = "id", required = false) String id,
                                                              @RequestParam(value = "idCard", required = false) String idCard,
                                                              @RequestParam(value = "phone", required = false) String phone){
         if (null == id && null == idCard && null == phone) {
@@ -56,7 +57,14 @@ public class NucleicController {
         if (ObjectUtils.isEmpty(vo)) {
             throw new ResidentException("查无此居民,请仔细检查信息是否填写正确");
         }
-        return vo;
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", vo.getName());
+        map.put("age", vo.getAge());
+        map.put("gender", vo.getGender());
+        map.put("phone", vo.getPhone());
+        map.put("result", vo.getResult());
+        map.put("time", vo.getTime());
+        return map;
     }
 
     @GetMapping("/get/result")

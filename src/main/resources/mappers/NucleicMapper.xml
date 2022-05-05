@@ -18,19 +18,27 @@
     <update id="batchEditNucleic">
         update tbl_nucleic
         set result = #{result}, time = #{time}
-        where resident_id in
-        <foreach collection="residentIds" item="residentId" open="(" separator="," close=")">
-            #{residentId}
-        </foreach>
+        <where>
+            <if test="residentIds != null">
+                resident_id in
+                <foreach collection="residentIds" item="residentId" open="(" separator="," close=")">
+                    #{residentId}
+                </foreach>
+            </if>
+        </where>
     </update>
 
     <update id="batchUpdateReturneesNucleic">
         update tbl_returnees
         set testTime = #{testTime}, result = #{result}
-        where id in
-        <foreach collection="returneesIds" item="returneesId" open="(" separator="," close=")">
-            #{returneesId}
-        </foreach>
+        <where>
+            <if test="returneesIds != null">
+                id in
+                <foreach collection="returneesIds" item="returneesId" open="(" separator="," close=")">
+                    #{returneesId}
+                </foreach>
+            </if>
+        </where>
     </update>
 
     <select id="findNucleicByIdCardOrId" resultType="cn.nero.community.domain.vo.ResidentNucleicVO">

@@ -57,7 +57,7 @@ public class StaffController {
     }
 
     @GetMapping("/find/staff/admin")
-    public PaginationVO<StaffAdminVO> findStaffAdminVO(@RequestParam(value = "state", required = false, defaultValue = "2") String state,
+    public PaginationVO<StaffAdminVO> findStaffAdminVO(@RequestParam(value = "state", required = false) String state,
                                                        @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
                                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
         return staffService.findStaffAdminVO(state, (pageNo - 1) * pageSize, pageSize);

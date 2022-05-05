@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,9 @@ public class FamilyServiceImpl implements FamilyService {
     @Override
     public FamilyVO findFamilyResident(String familyId) {
         FamilyVO familyVO = familyMapper.findFamilyVOByFamilyId(familyId);
+        if (ObjectUtils.isEmpty(familyVO)){
+            throw new FamilyException("查无此家庭");
+        }
         String owner = familyMapper.findFamilyOwner(familyId);
         familyVO.setCreateBy(owner);
         return familyVO;

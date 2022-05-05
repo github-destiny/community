@@ -1,18 +1,15 @@
 package cn.nero.community.aop;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aopalliance.intercept.Joinpoint;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.standard.processor.AbstractStandardDoubleAttributeModifierTagProcessor;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author Nero Claudius
@@ -45,7 +42,12 @@ public class CommunityAOP {
 
     @AfterReturning(pointcut = "afterServicePoint()", returning = "result")
     public void afterAdvice(Object result){
-        log.info("服务层查询结果:[{}]", result);
+        if (result instanceof List) {
+            List<Object> list = (List<Object>) result;
+            log.info("服务层查询结果数量:[{}]", list.size());
+        } else {
+            log.info("服务层查询结果:[{}]", result);
+        }
     }
 
 }

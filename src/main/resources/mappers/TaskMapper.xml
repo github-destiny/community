@@ -29,7 +29,7 @@
     </update>
 
     <select id="findTasks" resultType="cn.nero.community.domain.vo.TaskVO">
-        select t.id, t.strategy, t.content, t.state, t.createTime, r.id as returneesId, t.acceptTime
+        select t.id, t.strategy, t.content, t.state, t.createTime, r.id as returneesId, t.acceptTime,
                r.name, r.gender, r.idCard, r.address, r.applyTime, r.phone, r.inoculationTimes, r.endTime,c.province, c.city
         from tbl_task t
         left join tbl_returnees r
