@@ -37,6 +37,9 @@
             #{id}
         </foreach>
     </update>
+    <update id="ban">
+        update tbl_admin set lockState = #{flag} where id = #{condition} or account = #{condition}
+    </update>
 
     <select id="findAdminByAccount" resultType="cn.nero.community.domain.Admin">
         select id, account, password, salt, lockState, role from tbl_admin
@@ -88,5 +91,15 @@
 
     <select id="findRoleByAccount" resultType="java.lang.String">
         select role from tbl_admin where account = #{account}
+    </select>
+    <select id="findAdminLockState" resultType="java.lang.String">
+        select lockState
+        from tbl_admin
+        where id = #{condition} or account = #{condition}
+    </select>
+    <select id="findAdminByStaffId" resultType="cn.nero.community.domain.Admin">
+        select id, account, password, salt, staff_id, resident_id, lockState, role, createTime
+        from tbl_admin
+        where staff_id = #{staffId}
     </select>
 </mapper>

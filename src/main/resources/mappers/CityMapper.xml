@@ -51,5 +51,17 @@
             </if>
         </where>
     </select>
+    <select id="getTotalByLevel" resultType="java.lang.Integer">
+        select count(1) from tbl_cities where level like concat('%', #{level}, '%')
+    </select>
+    <select id="findAreaByLevel" resultType="cn.nero.community.domain.City">
+        select id, province, city, level
+        from tbl_cities
+        where province = #{province} and level = #{level}
+    </select>
+    <select id="getAllProvince" resultType="java.lang.String">
+        select distinct province
+        from tbl_cities
+    </select>
 
 </mapper>

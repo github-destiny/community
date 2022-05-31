@@ -4,6 +4,7 @@ import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.StaffAdminVO;
 import cn.nero.community.service.StaffService;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class StaffController {
     private StaffService staffService;
 
     @PostMapping("/save")
+    //@RequiresRoles(value = "admin")
     public Map<String, Object> save(Staff staff){
         String id = staffService.saveStaff(staff);
         Map<String, Object> map = new HashMap<>();
@@ -32,6 +34,7 @@ public class StaffController {
     }
 
     @PostMapping("/edit")
+    //@RequiresRoles(value = "admin")
     public void editStaffInfo(Staff staff) {
         staffService.editStaff(staff);
     }
@@ -52,15 +55,23 @@ public class StaffController {
     }
 
     @GetMapping("/approval")
+    //@RequiresRoles(value = "admin")
     public void batchApproval(@RequestParam("ids") List<String> ids){
         staffService.batchUpdateStaffLockState(ids);
     }
 
     @GetMapping("/find/staff/admin")
-    public PaginationVO<StaffAdminVO> findStaffAdminVO(@RequestParam(value = "state", required = false) String state,
+    public PaginationVO<StaffAdminVO> findStaffAdminVO(@RequestParam(value = "state", required = false, defaultValue = "1") String state,
                                                        @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
                                                        @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
         return staffService.findStaffAdminVO(state, (pageNo - 1) * pageSize, pageSize);
+    }
+
+    @GetMapping("/toggle")
+    //@RequiresRoles(value = "admin")
+    public String toggle(@RequestParam("staffId") String staffId){
+        staffService.toggle(staffId);
+        return "切换成功!";
     }
 
 }

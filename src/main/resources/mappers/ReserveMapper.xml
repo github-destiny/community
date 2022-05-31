@@ -10,6 +10,14 @@
         set time = #{time}
         where resident_id = #{resident_id}
     </update>
+    <update id="updateReserve">
+        update tbl_reserve
+        set num = #{num} , time = #{time}, createTime = #{createTime}
+        where resident_id = #{resident_id}
+    </update>
+    <insert id="saveAppointment">
+        insert into tbl_appointment(id, time) values(null, #{time})
+    </insert>
     <delete id="revokeReserve">
         delete from tbl_reserve where resident_id = #{residentId}
     </delete>
@@ -49,6 +57,21 @@
         on r.resident_id = re.id
         left join tbl_inoculation i
         on re.id = i.resident_id
-        where re.idCard = #{idCard} or re.id = #{idCard}
+        where re.idCard = #{idCard}
+    </select>
+    <select id="findReserveInfo" resultType="cn.nero.community.domain.vo.ResidentReserveVO">
+        select r.id as reserveId, r.resident_id as residentId, r.time as appointment, r.createTime, r.num as reserveNum, res.idCard, res.name, res.age, res.gender, res.address, res.phone
+        from tbl_reserve r
+        left join tbl_resident res
+        on r.resident_id = res.id
+        where time = #{time}
+        limit #{skipCount}, #{pageSize}
+    </select>
+    <select id="findAllReserveInfo" resultType="cn.nero.community.domain.vo.ResidentReserveVO">
+        select r.id as reserveId, r.resident_id as residentId, r.time as appointment, r.createTime, r.num as reserveNum, res.idCard, res.name, res.age, res.gender, res.address, res.phone
+        from tbl_reserve r
+        left join tbl_resident res
+        on r.resident_id = res.id
+        where time = #{time}
     </select>
 </mapper>

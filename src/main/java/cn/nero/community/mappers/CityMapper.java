@@ -43,4 +43,24 @@ public interface CityMapper {
      */
     void updateCityByProvince(@Param("province") String province, @Param("level") String level);
 
+    /**
+     * 通过风险等级查询共有多少个风险城市
+     * @param level
+     * @return
+     */
+    int getTotalByLevel(@Param("level") String level);
+
+    /**
+     * 查询某个区域的风险城市
+     * @param province
+     * @param level
+     * @return
+     */
+    List<City> findAreaByLevel(@Param("province") String province, @Param("level") String level);
+
+    /**
+     * 获取所有省份信息
+     * @return
+     */
+    List<String> getAllProvince();
 }

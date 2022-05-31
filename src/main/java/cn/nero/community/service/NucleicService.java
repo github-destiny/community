@@ -15,14 +15,12 @@ public interface NucleicService {
 
     /**
      * 更新核酸检测结果
-     * @param nucleic
      */
-    void updateNucleic(Nucleic nucleic);
+    void updateNucleic(String condition, String result);
 
     /**
      * 批量修改检测结果
      * @param residentIds
-     * @param resultId
      */
     void batchUpdateNucleic(List<String> residentIds, String result, String time);
 
@@ -45,11 +43,20 @@ public interface NucleicService {
 
     /**
      * 获取全员的核酸检测结果
-     * @param result
      * @param startTime
      * @param endTime
      * @return
      */
     Map<String, Object> getNucleicResultAll(String startTime, String endTime);
 
+    /**
+     * 更新全员核酸检测结果
+     */
+    void updateAll(String result, String time);
+
+    /**
+     * 页面初始化调用
+     * @return
+     */
+    Map<String, Object> init(String startTime, String endTime);
 }

@@ -75,6 +75,13 @@ public interface FamilyMapper {
      */
     int isExistsMemberInFamily(@Param("familyId") String familyId, @Param("residentId") String residentId);
 
+    /**
+     * 通过居民id查询是否存在家庭
+     * @param residentId
+     * @return
+     */
+    String findFamilyByResidentId(@Param("residentId") String residentId);
+
 
 
 }

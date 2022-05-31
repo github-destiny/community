@@ -40,6 +40,9 @@
             </if>
         </where>
     </update>
+    <update id="updateAll">
+        update tbl_nucleic set result = #{result}, time = #{time}
+    </update>
 
     <select id="findNucleicByIdCardOrId" resultType="cn.nero.community.domain.vo.ResidentNucleicVO">
         select r.id, r.idCard, r.name, r.age, r.gender, r.address, r.phone, n.result, n.time
@@ -80,5 +83,19 @@
         left join tbl_nucleic n
         on n.resident_id = r.id
         where n.result = '阳性'
+    </select>
+    <select id="findNucleicByResidentId" resultType="cn.nero.community.domain.Nucleic">
+        select id, resident_id, result, time
+        from tbl_nucleic
+        where resident_id = #{residentId}
+    </select>
+    <select id="getNucleicTotal" resultType="java.lang.Integer">
+        select count(1) from tbl_nucleic where time &gt;= #{startTime} and time &lt;= #{endTime}
+    </select>
+    <select id="getRecentNucleicTime" resultType="java.lang.String">
+        select time
+        from tbl_nucleic
+        order by time desc
+        limit 1
     </select>
 </mapper>

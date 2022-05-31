@@ -1,5 +1,6 @@
 package cn.nero.community.service.impl;
 
+import cn.nero.community.domain.Admin;
 import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.StaffAdminVO;
 import cn.nero.community.mappers.AdminMapper;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -67,5 +69,24 @@ public class StaffServiceImpl implements StaffService {
         List<StaffAdminVO> dataList = staffMapper.findStaffAdminList(state, skipCount, pageSize);
         int total = staffMapper.getStaffAdminVOTotal(state);
         return new PaginationVO<>(dataList, total);
+    }
+
+    @Override
+    public void toggle(String staffId) {
+        Staff staff = staffMapper.findStaffById(staffId);
+        // 获取对应的admin信息
+        Admin admin = adminMapper.findAdminByStaffId(staffId);
+        String state = staff.getState();
+        if ("1".equals(state)) {
+            state = "2";
+        } else {
+            state = "1";
+        }
+        staff.setState(state);
+        // 如果存在账号,则级联修改
+        if (!ObjectUtils.isEmpty(admin)){
+            adminMapper.ban(admin.getId(), state);
+        }
+        staffMapper.editStaff(staff);
     }
 }

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 /**
  * @author Nero Claudius
  * @version 1.0.0

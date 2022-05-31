@@ -1,9 +1,11 @@
 package cn.nero.community.controller;
 
+import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.User;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.UserVO;
 import cn.nero.community.realms.CustomerToken;
+import cn.nero.community.service.ResidentService;
 import cn.nero.community.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
@@ -12,6 +14,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,13 +30,25 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ResidentService residentService;
+
     @PostMapping("/login")
-    public String login(String account, String password){
+    public Map<String, Object> login(@RequestParam("account") String account,
+                        @RequestParam("password") String password){
         String loginType = "User";
         CustomerToken token = new CustomerToken(account, password, loginType);
         Subject subject = SecurityUtils.getSubject();
         subject.login(token);
-        return "登陆成功!";
+        // 在此注入user信息
+        User user = userService.findUserByAccount(account);
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", "登陆成功");
+        map.put("account", account);
+        map.put("role", "user");
+        map.put("residentId", user.getResident_id());
+        map.put("userId", user.getId());
+        return map;
     }
 
     @GetMapping("/logout")
@@ -89,6 +104,11 @@ public class UserController {
     @GetMapping("/unblock/batch")
     public void batchUnBlockAccount(@RequestParam("accounts") List<String> accounts){
         userService.batchUnBlockAccount(accounts);
+    }
+
+    @GetMapping("/get/all")
+    public Map<String, Object> getAllResidentInfo(@RequestParam("residentId") String residentId){
+        return residentService.findAllResidentInfo(residentId);
     }
 
 }

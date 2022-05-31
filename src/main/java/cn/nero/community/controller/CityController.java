@@ -40,6 +40,16 @@ public class CityController {
         cityService.updateProvinceLevel(province, level);
     }
 
+    @GetMapping("/get/all")
+    public List<Map<String, Object>> getAllCities(){
+        return cityService.getAll();
+    }
+
+    @GetMapping("/get/province")
+    public List<Map<String, Object>> getAllProvince(){
+        return cityService.getAllProvince();
+    }
+
 
 
 }

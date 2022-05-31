@@ -110,6 +110,19 @@ public interface ReturneesMapper {
      */
     List<ReturneesCityVO> findAllReturnees();
 
+    /**
+     * 根据id删除
+     * @param id
+     */
+    void deleteReturneesById(@Param("id") String id);
+
+    /**
+     * 通过id查找returnees
+     * @param id
+     * @return
+     */
+    Returnees findReturneesById(@Param("id") String id);
+
 
 
 }

@@ -31,4 +31,26 @@ public interface CityService {
      */
     void updateProvinceLevel(String province, String level);
 
+    /**
+     * 通过风险查询共有多少个风险城市
+     * @param level
+     * @return
+     */
+    int getTotalByLevel(String level);
+
+    /**
+     * 查询周围的城市风险情况
+     * @param province
+     * @param level
+     * @return
+     */
+    List<City> findAreaLevel(String province, String level);
+
+    List<Map<String, Object>> getAll();
+
+    /**
+     * 获取所有省份
+     * @return
+     */
+    List<Map<String, Object>> getAllProvince();
 }

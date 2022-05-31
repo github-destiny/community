@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Nero Claudius
  * @version 1.0.0
@@ -61,4 +63,21 @@ public interface ReserveMapper {
      */
     void revokeReserve(String residentId);
 
+    /**
+     * 获取当天接种人的详细信息
+     *
+     * @param time
+     * @return
+     */
+    List<ResidentReserveVO> findReserveInfo(@Param("time") String time, @Param("skipCount") Integer skipCount, @Param("pageSize") Integer pageSize);
+
+    List<ResidentReserveVO> findAllReserveInfo(@Param("time") String time);
+
+    void saveAppointment(@Param("time") String time);
+
+    /**
+     * 更新预约信息
+     * @param reserve
+     */
+    void updateReserve(Reserve reserve);
 }

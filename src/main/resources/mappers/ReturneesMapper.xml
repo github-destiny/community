@@ -29,6 +29,24 @@
     <update id="updateReturnees">
         update tbl_returnees
         <trim prefix="set" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name = #{name} ,
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender} ,
+            </if>
+            <if test="idCard != null and idCard != ''">
+                idCard = #{idCard} ,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone} ,
+            </if>
+            <if test="inoculationTimes != null and inoculationTimes != ''">
+                inoculationTimes = #{inoculationTimes} ,
+            </if>
+            <if test="from != null and from != ''">
+                `from` = #{from} ,
+            </if>
             <if test="address != null and address != ''">
                 address = #{address},
             </if>
@@ -41,6 +59,9 @@
         </trim>
         where id = #{id} or idCard = #{idCard}
     </update>
+    <delete id="deleteReturneesById">
+        delete from tbl_returnees where id = #{id}
+    </delete>
 
     <select id="findReturneesByCondition" resultType="cn.nero.community.domain.vo.ReturneesCityVO">
         select r.*, c.id as cid, c.province, c.city, c.`level`
@@ -164,6 +185,13 @@
         from tbl_returnees r
         left join tbl_cities c
         on r.`from` = c.id
+    </select>
+    <select id="findReturneesById" resultType="cn.nero.community.domain.Returnees">
+        select r.id, r.name, r.gender, r.idCard, r.address, r.applyTime, c.city as `from`, r.phone, r.inoculationTimes, r.endTime, r.testTime, r.result
+        from tbl_returnees r
+        left join tbl_cities c
+        on r.from = c.id
+        where r.id = #{id}
     </select>
 
 

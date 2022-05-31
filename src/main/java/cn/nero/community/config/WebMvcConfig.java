@@ -1,5 +1,6 @@
 package cn.nero.community.config;
 
+import cn.nero.community.interceptor.MyInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;

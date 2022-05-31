@@ -29,7 +29,7 @@ public class AnnouncementController {
     }
 
     @GetMapping("/delete/{id}")
-    public void deleteAnnouncement(@PathVariable("id") String id){
+    public void deleteAnnounceme0nt(@PathVariable("id") String id){
         announcementService.deleteAnnouncement(id);
     }
 

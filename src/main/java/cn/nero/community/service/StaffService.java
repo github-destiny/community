@@ -53,4 +53,9 @@ public interface StaffService {
      */
     PaginationVO<StaffAdminVO> findStaffAdminVO(String state, Integer skipCount, Integer pageSize);
 
+    /**
+     * 切换状态
+     * @param staffId
+     */
+    void toggle(String staffId);
 }

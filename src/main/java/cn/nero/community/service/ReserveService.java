@@ -1,7 +1,9 @@
 package cn.nero.community.service;
 
 import cn.nero.community.domain.Reserve;
+import cn.nero.community.domain.vo.ResidentReserveVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +23,11 @@ public interface ReserveService {
 
     void revokeReserve(String residentId);
 
+    ResidentReserveVO reverse(String idCard, String times);
+
+    Map<String, Object> getReserveInfo(String time, Integer skipCount, Integer pageSize);
+
+    List<ResidentReserveVO> findAllReserveInfo(String time);
+
+    void saveAppointment(String time);
 }

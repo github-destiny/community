@@ -1,6 +1,5 @@
 package cn.nero.community.controller;
 
-import cn.nero.community.domain.Nucleic;
 import cn.nero.community.domain.vo.ResidentNucleicVO;
 import cn.nero.community.exception.ResidentException;
 import cn.nero.community.service.NucleicService;
@@ -28,8 +27,8 @@ public class NucleicController {
     private NucleicService nucleicService;
 
     @GetMapping("/update/personal")
-    public void updateNucleic(Nucleic nucleic){
-        nucleicService.updateNucleic(nucleic);
+    public void updateNucleic(@RequestParam("condition") String condition,@RequestParam("result") String result){
+        nucleicService.updateNucleic(condition, result);
     }
 
     @GetMapping("/update/batch/resident")
@@ -62,6 +61,7 @@ public class NucleicController {
         map.put("age", vo.getAge());
         map.put("gender", vo.getGender());
         map.put("phone", vo.getPhone());
+        map.put("address", vo.getAddress());
         map.put("result", vo.getResult());
         map.put("time", vo.getTime());
         return map;
@@ -71,6 +71,19 @@ public class NucleicController {
     public Map<String, Object> getNucleicResult(@RequestParam(value = "startTime") String startTime,
                                                 @RequestParam(value = "endTime") String endTime){
         return nucleicService.getNucleicResultAll(startTime, endTime);
+    }
+
+    @GetMapping("/update/all")
+    public String updateAll(@RequestParam("result") String result,
+                            @RequestParam("time") String time){
+        nucleicService.updateAll(result, time);
+        return "更新成功";
+    }
+
+    @GetMapping("/get/init")
+    public Map<String, Object> init(@RequestParam("startTime") String startTime,
+                                    @RequestParam("endTime") String endTime){
+        return nucleicService.init(startTime, endTime);
     }
 
 }

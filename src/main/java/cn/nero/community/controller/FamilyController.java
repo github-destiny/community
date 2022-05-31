@@ -44,6 +44,11 @@ public class FamilyController {
         familyService.deleteFamilyMemberById(familyId, residentId);
     }
 
+    @GetMapping("/find/residentId/{residentId}")
+    public FamilyVO findFamilyByResidentId(@PathVariable("residentId") String residentId){
+        return familyService.findFamilyByResidentId(residentId);
+    }
+
 
 
 }

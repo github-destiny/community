@@ -59,4 +59,22 @@
             </if>
         </where>
     </select>
+    <select id="findTaskList" resultType="cn.nero.community.domain.Task">
+        select id, returnees_id, strategy, content, staff_id, state, createTime, acceptTime, updateTime
+        from tbl_task
+        where state = '未接受'
+        limit #{skipCount}, #{pageSize}
+    </select>
+    <select id="getNotAllowTaskCount" resultType="java.lang.Integer">
+        select count(1) from tbl_task where state = '未接受'
+    </select>
+    <select id="findStrategy" resultType="cn.nero.community.domain.Strategy">
+        select id, `desc`, level
+        from tbl_strategy
+    </select>
+    <select id="findMyTask" resultType="cn.nero.community.domain.Task">
+        select id, returnees_id, strategy, content, staff_id, state, createTime, acceptTime, updateTime
+        from tbl_task
+        where staff_id = #{staffId} and state = #{state}
+    </select>
 </mapper>

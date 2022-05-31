@@ -105,7 +105,7 @@ public interface ResidentMapper {
      * @param residentId
      * @return
      */
-    User findUserByResidentId(String residentId);
+    User findUserByResidentId(@Param("residentId") String residentId);
 
     /**
      * 通过身份证号查询用户部分信息,结合家庭关联时使用
@@ -125,5 +125,38 @@ public interface ResidentMapper {
      * @return
      */
     List<Resident> findAllResident();
+
+    /**
+     * 通过id查找resident
+     * @param residentId
+     * @return
+     */
+    Resident findResidentById(@Param("residentId") String residentId);
+
+    /**
+     * 通过居民id查询他的疫苗接种情况
+     * @param residentId
+     * @return
+     */
+    Inoculation findInoculationByResidentId(@Param("residentId") String residentId);
+
+    /**
+     * 为某个居民添加预约接种记录
+     * @param inoculation
+     */
+    void addInoculationInfo(Inoculation inoculation);
+
+    /**
+     * 获取社区居民总人数
+     * @return
+     */
+    int getResidentCount();
+
+    /**
+     * 通过手机号或者身份证号查找一个居民信息
+     * @param condition
+     * @return
+     */
+    Resident findResidentByIdCardOrPhone(@Param("condition") String condition);
 
 }

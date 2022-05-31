@@ -1,10 +1,12 @@
 package cn.nero.community.service.impl;
 
 import cn.nero.community.domain.Admin;
+import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.exception.account.AccountAlreadyExistException;
 import cn.nero.community.exception.account.AccountStateException;
 import cn.nero.community.mappers.AdminMapper;
+import cn.nero.community.mappers.StaffMapper;
 import cn.nero.community.service.AdminService;
 import cn.nero.community.utils.DateTimeUtil;
 import cn.nero.community.utils.Md5Util;
@@ -33,6 +35,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private StaffMapper staffMapper;
 
     @Override
     public Admin findAdminByAccount(String account) {
@@ -104,6 +109,21 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void approval(List<String> ids) {
         adminMapper.approval(ids);
+    }
+
+    @Override
+    public void ban(String condition) {
+        String adminLockState = adminMapper.findAdminLockState(condition);
+        String banFlag = "1";
+        if ("1".equals(adminLockState)) {
+            banFlag = "2";
+        }
+        adminMapper.ban(condition, banFlag);
+    }
+
+    @Override
+    public Staff findStaffByAccount(String account) {
+        return staffMapper.findStaffByAdminIdOrAccount(account);
     }
 
 }

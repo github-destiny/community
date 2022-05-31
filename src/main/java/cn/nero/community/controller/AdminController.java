@@ -1,9 +1,11 @@
 package cn.nero.community.controller;
 
 import cn.nero.community.domain.Admin;
+import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.realms.CustomerToken;
 import cn.nero.community.service.AdminService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -21,13 +23,16 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
     @PostMapping("/login")
-    public Map<String, Object> login(String account, String password) {
+    public Map<String, Object> login(@RequestParam(value = "account", required = false) String account,
+                                     @RequestParam(value = "password", required = false) String password){
+        log.info("account : {}", account);
         Map<String, Object> result = new HashMap<>();
         // 获取主题对象
         Subject subject = SecurityUtils.getSubject();
@@ -39,6 +44,9 @@ public class AdminController {
         result.put("account", account);
         result.put("role", role);
         result.put("msg", "登陆成功");
+        // 获取账号信息
+        Staff staff = adminService.findStaffByAccount(account);
+        result.put("sid", staff.getId());
         return result;
     }
 
@@ -54,7 +62,7 @@ public class AdminController {
     }
 
     @GetMapping("/find")
-    @RequiresRoles("admin")
+    //@RequiresRoles("admin")
     public PaginationVO<Admin> findAdminByCondition(
             Admin admin,
             @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,
@@ -78,7 +86,7 @@ public class AdminController {
     }
 
     @GetMapping("/approval")
-    @RequiresRoles("admin")
+    //@RequiresRoles("admin")
     public String approval(@RequestParam("ids") List<String> ids){
         adminService.approval(ids);
         return "操作成功";
@@ -88,7 +96,17 @@ public class AdminController {
      * 修改账号,通常是封禁与权限提升,只能由admin操作
      */
     @GetMapping("/edit")
-    public void editAdmin(){
-        System.out.println("正在修改...");
+    public void editAdmin(Admin admin){
+        log.info("正在实现中...");
+    }
+
+    /**
+     * 封禁管理员账号,通过id或账号信息
+     * @param condition
+     */
+    @GetMapping("/toggle")
+    @RequiresRoles(value = "admin")
+    public void ban(@RequestParam("condition") String condition){
+        adminService.ban(condition);
     }
 }

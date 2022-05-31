@@ -97,6 +97,8 @@ public class ResidentController {
 
     @GetMapping("/export")
     public void exportExcel(HttpServletResponse response) throws IOException {
+        response.addHeader("content-disposition", "attachment;fileName=" + URLEncoder.encode("居民信息.xls", StandardCharsets.UTF_8));
+        response.setHeader("Access-Control-Expose-Headers", "content-disposition");
         response.setHeader("content-disposition", "attachment;fileName=" + URLEncoder.encode("居民信息.xls", StandardCharsets.UTF_8));
         Workbook workbook = null;
         ServletOutputStream oos = null;

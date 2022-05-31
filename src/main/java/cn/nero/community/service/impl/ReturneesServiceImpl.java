@@ -6,6 +6,7 @@ import cn.nero.community.domain.Task;
 import cn.nero.community.domain.vo.Count;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.ReturneesCityVO;
+import cn.nero.community.exception.ReturneesException;
 import cn.nero.community.mappers.CityMapper;
 import cn.nero.community.mappers.ReturneesMapper;
 import cn.nero.community.mappers.TaskMapper;
@@ -156,6 +157,24 @@ public class ReturneesServiceImpl implements ReturneesService {
     @Override
     public List<ReturneesCityVO> findAllReturnees() {
         return returneesMapper.findAllReturnees();
+    }
+
+    @Override
+    public void deleteReturnees(String id) {
+        Returnees returnees = returneesMapper.findReturneesById(id);
+        String time = DateTimeUtil.getTime();
+        if (returnees.getEndTime() != null && !"".equals(returnees.getEndTime())) {
+            if (time.compareTo(returnees.getEndTime()) <= 0) {
+                throw new ReturneesException("该外来人员未到封禁结束时间,不能删除!");
+            } else {
+                returneesMapper.deleteReturneesById(id);
+            }
+        }
+    }
+
+    @Override
+    public Returnees findReturneesById(String id) {
+        return returneesMapper.findReturneesById(id);
     }
 
 

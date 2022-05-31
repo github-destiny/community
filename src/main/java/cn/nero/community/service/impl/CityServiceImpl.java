@@ -55,5 +55,41 @@ public class CityServiceImpl implements CityService {
         cityMapper.updateCityByProvince(province, level);
     }
 
+    @Override
+    public int getTotalByLevel(String level) {
+        return cityMapper.getTotalByLevel(level);
+    }
+
+    @Override
+    public List<City> findAreaLevel(String province, String level) {
+        return cityMapper.findAreaByLevel(province, level);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAll() {
+        List<City> dataList = cityMapper.findCityByCondition(null);
+        List<Map<String, Object>> resList = new ArrayList<>();
+        for (City city : dataList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("value", city.getId());
+            map.put("label", city.getCity());
+            resList.add(map);
+        }
+        return resList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllProvince() {
+        List<String> provinces = cityMapper.getAllProvince();
+        List<Map<String, Object>> resList = new ArrayList<>();
+        for (String province : provinces) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("value", province);
+            map.put("label", province);
+            resList.add(map);
+        }
+        return resList;
+    }
+
 
 }

@@ -1,15 +1,13 @@
 package cn.nero.community.service.impl;
 
-import cn.nero.community.domain.Inoculation;
-import cn.nero.community.domain.Nucleic;
-import cn.nero.community.domain.Resident;
-import cn.nero.community.domain.User;
+import cn.nero.community.domain.*;
+import cn.nero.community.domain.vo.PaginationVO;
+import cn.nero.community.domain.vo.ResidentInoculationVO;
 import cn.nero.community.exception.ResidentException;
+import cn.nero.community.mappers.CityMapper;
 import cn.nero.community.mappers.NucleicMapper;
 import cn.nero.community.mappers.ResidentMapper;
 import cn.nero.community.service.ResidentService;
-import cn.nero.community.domain.vo.PaginationVO;
-import cn.nero.community.domain.vo.ResidentInoculationVO;
 import cn.nero.community.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,9 @@ public class ResidentServiceImpl implements ResidentService {
 
     @Autowired
     private NucleicMapper nucleicMapper;
+
+    @Autowired
+    private CityMapper cityMapper;
 
     @Override
     public Map<String, Object> saveResident(Resident resident) {
@@ -163,5 +164,46 @@ public class ResidentServiceImpl implements ResidentService {
     @Override
     public List<Resident> findAllResident() {
         return residentMapper.findAllResident();
+    }
+
+    @Override
+    public Map<String, Object> findAllResidentInfo(String residentId) {
+        // 返回结果
+        Map<String, Object> map = new HashMap<>();
+        // 查询基础信息
+        Resident resident = residentMapper.findResidentById(residentId);
+        Map<String, String> residentMap = new HashMap<>();
+        residentMap.put("name", resident.getName());
+        residentMap.put("age", resident.getAge());
+        residentMap.put("gender", resident.getGender());
+        residentMap.put("phone", resident.getPhone());
+        residentMap.put("address", resident.getAddress());
+        map.put("resident", residentMap);
+        // 查询居民的疫苗接种信息
+        Inoculation inoculation = residentMapper.findInoculationByResidentId(residentId);
+        map.put("inoculation", inoculation);
+        // 查询当前居住地区风险等级
+        Map<String, Object> levelMap = new HashMap<>();
+        levelMap.put("currentProvince", "黑龙江省");
+        levelMap.put("currentCity", "七台河市");
+        City city = new City();
+        city.setCity("七台河");
+        List<City> cityByCondition = cityMapper.findCityByCondition(city);
+        levelMap.put("currentLevel", cityByCondition.get(0).getLevel());
+        // 当前居住地区
+        levelMap.put("current", resident.getAddress());
+        List<City> currentHighLevelArea = cityMapper.findAreaByLevel("黑龙江", "高风险");
+        // 高风险地区
+        levelMap.put("highTotal", currentHighLevelArea.size());
+        levelMap.put("highCity", currentHighLevelArea);
+        List<City> mid = cityMapper.findAreaByLevel("黑龙江", "中风险");
+        // 中风险地区
+        levelMap.put("mid", mid.size());
+        levelMap.put("midCity", mid);
+        map.put("area", levelMap);
+        // 核酸检测结果
+        Nucleic nucleic = nucleicMapper.findNucleicByResidentId(residentId);
+        map.put("nucleic", nucleic);
+        return map;
     }
 }

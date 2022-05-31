@@ -57,5 +57,10 @@
     <select id="isExistsMemberInFamily" resultType="java.lang.Integer">
         select count(1) from tbl_family_resident where family_id = #{familyId} and resident_id = #{residentId}
     </select>
+    <select id="findFamilyByResidentId" resultType="java.lang.String">
+        select fr.family_id
+        from tbl_family_resident fr
+        where fr.resident_id = #{residentId}
+    </select>
 
 </mapper>

@@ -92,4 +92,22 @@ public class ReturneesController {
             }
         }
     }
+
+    @PostMapping("/update")
+    public String update(Returnees returnees){
+        returneesService.updateReturnees(returnees);
+        return "修改成功";
+    }
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam("id") String id){
+        returneesService.deleteReturnees(id);
+        return "删除成功";
+    }
+
+    @GetMapping("/find/{id}")
+    public Returnees findReturneesById(@PathVariable("id") String id){
+        return returneesService.findReturneesById(id);
+    }
+
 }

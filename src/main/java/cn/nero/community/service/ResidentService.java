@@ -87,4 +87,11 @@ public interface ResidentService {
      */
     List<Resident> findAllResident();
 
+    /**
+     * 通过居民的id查询居民的所有基础信息
+     * @param residentId
+     * @return
+     */
+    Map<String, Object> findAllResidentInfo(String residentId);
+
 }

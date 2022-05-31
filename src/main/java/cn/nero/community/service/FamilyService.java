@@ -1,5 +1,6 @@
 package cn.nero.community.service;
 
+import cn.nero.community.domain.Resident;
 import cn.nero.community.domain.vo.FamilyVO;
 
 import java.util.List;
@@ -21,5 +22,12 @@ public interface FamilyService {
     FamilyVO findFamilyResident(String familyId);
 
     void deleteFamilyMemberById(String familyId, String residentId);
+
+    /**
+     * 根据居民id查询居民是否存在家庭
+     * @param residentId
+     * @return
+     */
+    FamilyVO findFamilyByResidentId(String residentId);
 
 }

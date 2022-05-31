@@ -23,6 +23,10 @@
             (#{inoculation.resident_id}, #{inoculation.times}, #{inoculation.lastTime})
         </foreach>
     </insert>
+    <insert id="addInoculationInfo">
+        insert into tbl_inoculation(id, resident_id, times, lastTime)
+        values(null, #{resident_id}, #{times}, #{lastTime})
+    </insert>
 
     <update id="editResidentInfo">
         update tbl_resident
@@ -43,7 +47,7 @@
                 address = #{address},
             </if>
             <if test="phone != null and phone != ''">
-                phone = #{phone}
+                phone = #{phone},
             </if>
             <if test="state != null and state != ''">
                 state = #{state}
@@ -61,11 +65,11 @@
         from tbl_user u
         join tbl_resident r
         on u.resident_id = r.id
-        where u.id = #{id}
+        where u.id = #{id} or u.account = #{id}
     </select>
 
     <select id="findResidentsByCondition" resultType="cn.nero.community.domain.Resident">
-        select t.id, t.idCard, t.name, t.age, t.gender, t.address, t.phone, s.state
+        select t.id, t.idCard, t.name, t.age, t.gender, t.address, t.phone, t.state
         from tbl_resident t
         left join tbl_state s
         on t.state = s.id
@@ -183,6 +187,7 @@
         from tbl_resident r
         join tbl_user u
         on r.id = u.resident_id
+        where r.id = #{residentId}
     </select>
     <select id="findResidentByIdCard" resultType="cn.nero.community.domain.Resident">
         select id, name, age, gender, idCard, phone
@@ -199,5 +204,23 @@
     <select id="findAllResident" resultType="cn.nero.community.domain.Resident">
         select id, idCard, name, age, gender, address, phone, state
         from tbl_resident
+    </select>
+    <select id="findResidentById" resultType="cn.nero.community.domain.Resident">
+        select id, idCard, name, age, gender, address, phone, state
+        from tbl_resident
+        where id = #{residentId}
+    </select>
+    <select id="findInoculationByResidentId" resultType="cn.nero.community.domain.Inoculation">
+        select id, resident_id, times, lastTime
+        from tbl_inoculation
+        where resident_id = #{residentId}
+    </select>
+    <select id="getResidentCount" resultType="java.lang.Integer">
+        select count(1) from tbl_resident
+    </select>
+    <select id="findResidentByIdCardOrPhone" resultType="cn.nero.community.domain.Resident">
+        select id, idCard, name, age, gender, address, phone, state
+        from tbl_resident
+        where idCard = #{condition} or phone = #{condition}
     </select>
 </mapper>

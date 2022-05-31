@@ -25,7 +25,6 @@ public interface NucleicMapper {
 
     /**
      * 通过residentId列进行保存,通常是用于简化保存
-     * @param residentId
      */
     void saveNucleicByResidentIdColumn(Nucleic nucleic);
 
@@ -78,4 +77,33 @@ public interface NucleicMapper {
      */
     List<ResidentNucleicVO> findPositiveResidentNucleicVO();
 
+    /**
+     * 通过居民id查询核酸检测结果
+     * @param residentId
+     * @return
+     */
+    Nucleic findNucleicByResidentId(@Param("residentId") String residentId);
+
+    /**
+     * 更新全员信息
+     * @param result
+     * @param time
+     */
+    void updateAll(@Param("result") String result, @Param("time") String time);
+
+    /**
+     * 获取某个日期的做核酸人数
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    int getNucleicTotal(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    /**
+     * 获取最近一次的核酸检测时间
+     * @return
+     */
+    String getRecentNucleicTime();
+
+    
 }

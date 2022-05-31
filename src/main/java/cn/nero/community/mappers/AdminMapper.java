@@ -35,4 +35,15 @@ public interface AdminMapper {
     int getTotal(Admin admin);
 
     String findRoleByAccount(String account);
+
+    void ban(@Param("condition") String condition, @Param("flag") String flag);
+
+    /**
+     * 通过id或者账号查找账号的锁定状态
+     * @param condition
+     * @return
+     */
+    String findAdminLockState(@Param("condition") String condition);
+
+    Admin findAdminByStaffId(@Param("staffId") String staffId);
 }

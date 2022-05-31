@@ -65,7 +65,18 @@ public interface ReturneesService {
      */
     List<ReturneesCityVO> findAllReturnees();
 
+    /**
+     * 删除
+     * @param id
+     */
+    void deleteReturnees(String id);
 
+    /**
+     * 通过`id查询returnees
+     * @param id
+     * @return
+     */
+    Returnees findReturneesById(String id);
 
 
 

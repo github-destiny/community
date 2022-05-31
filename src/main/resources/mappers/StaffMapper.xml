@@ -119,5 +119,10 @@
         on s.job_id = j.id
         where state = #{state}
     </select>
+    <select id="findStaffById" resultType="cn.nero.community.domain.Staff">
+        select id, name, age, gender, idCard, phone, job_id, state
+        from tbl_staff
+        where id = #{id}
+    </select>
 
 </mapper>

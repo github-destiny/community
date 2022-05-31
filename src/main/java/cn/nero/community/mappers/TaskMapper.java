@@ -1,5 +1,6 @@
 package cn.nero.community.mappers;
 
+import cn.nero.community.domain.Strategy;
 import cn.nero.community.domain.Task;
 import cn.nero.community.domain.vo.TaskVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -42,4 +43,19 @@ public interface TaskMapper {
      */
     void updateTask(Task task);
 
+    List<Task> findTaskList(@Param("skipCount") Integer skipCount, @Param("pageSize") Integer pageSize);
+
+    /**
+     * 获取未接受的任务数量
+     * @return
+     */
+    int getNotAllowTaskCount();
+
+    /**
+     * 查找封禁策略
+     * @return
+     */
+    List<Strategy> findStrategy();
+
+    List<Task> findMyTask(@Param("staffId") String staffId, @Param("state") String state);
 }

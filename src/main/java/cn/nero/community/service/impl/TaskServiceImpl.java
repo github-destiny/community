@@ -1,5 +1,6 @@
 package cn.nero.community.service.impl;
 
+import cn.nero.community.domain.Strategy;
 import cn.nero.community.domain.Task;
 import cn.nero.community.domain.vo.PaginationVO;
 import cn.nero.community.domain.vo.TaskVO;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Nero Claudius
@@ -48,4 +51,24 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdateTime(DateTimeUtil.getTime());
         taskMapper.updateTask(task);
     }
+
+    @Override
+    public Map<String, Object> findTasks(Integer skipCount, Integer pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        List<Task> dataList = taskMapper.findTaskList(skipCount, pageSize);
+        map.put("dataList", dataList);
+        map.put("total", taskMapper.getNotAllowTaskCount());
+        return map;
+    }
+
+    @Override
+    public List<Strategy> findStrategies() {
+        return taskMapper.findStrategy();
+    }
+
+    @Override
+    public List<Task> findMyTask(String staffId, String state) {
+        return taskMapper.findMyTask(staffId, state);
+    }
+
 }

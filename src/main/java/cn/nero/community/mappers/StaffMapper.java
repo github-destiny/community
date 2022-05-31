@@ -70,4 +70,11 @@ public interface StaffMapper {
      */
     int getStaffAdminVOTotal(String state);
 
+    /**
+     * 通过id查找员工信息
+     * @param id
+     * @return
+     */
+    Staff findStaffById(@Param("id") String id);
+
 }

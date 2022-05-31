@@ -1,6 +1,7 @@
 package cn.nero.community.service;
 
 import cn.nero.community.domain.Admin;
+import cn.nero.community.domain.Staff;
 import cn.nero.community.domain.vo.PaginationVO;
 
 import java.util.List;
@@ -67,4 +68,16 @@ public interface AdminService {
      */
     void approval(List<String> ids);
 
+    /**
+     * 封禁管理员账号
+     * @param condition
+     */
+    void ban(String condition);
+
+    /**
+     * 通过员工账号查找员工信息
+     * @param account
+     * @return
+     */
+    Staff findStaffByAccount(String account);
 }
